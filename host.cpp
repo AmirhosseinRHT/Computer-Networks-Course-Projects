@@ -1,3 +1,7 @@
 #include "host.hpp"
 
-Host::Host() {}
+Host::Host(std::string ip , QObject * parent)
+: QObject{parent}
+{
+    IP = ip;
+}

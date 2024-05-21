@@ -1,3 +1,5 @@
 #include "controller.hpp"
 
-controller::controller() {}
+controller::controller(QObject * parent)
+: QObject{parent}
+{}

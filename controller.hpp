@@ -3,11 +3,11 @@
 
 #include <QObject>
 
-class controller
+class controller  : public QObject
 {
     Q_OBJECT
 public:
-    controller();
+   explicit controller(QObject *parent = nullptr);
 };
 
 #endif // CONTROLLER_HPP

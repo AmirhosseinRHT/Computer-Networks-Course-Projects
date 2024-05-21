@@ -1,3 +1,7 @@
 #include "router.hpp"
 
-router::router() {}
+router::router(std::string ip , QObject* parent)
+: QObject{parent}
+{
+    IP = ip;
+}

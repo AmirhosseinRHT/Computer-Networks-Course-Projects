@@ -13,6 +13,7 @@ SOURCES += \
 HEADERS += \
         Router.hpp \
         controller.hpp \
+        forwardingRow.h \
         host.hpp \
         packet.hpp \
         router.hpp \
