@@ -1,9 +1,11 @@
 #ifndef FORWARDINGROW_H
 #define FORWARDINGROW_H
-#include <string>
+#include "node.hpp"
 
 typedef struct{
-    std::string forwardingIP;
+    IP forwardingIP;
+    IP subnetMask;
+    IP subnetID;
     int port;
 } forwardingRow;
 

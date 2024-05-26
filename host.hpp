@@ -4,16 +4,17 @@
 #include <QObject>
 #include <string>
 #include "packet.hpp"
-#include "wire.hpp"
-class Host  : public QObject
+#include "node.hpp"
+#include "defs.hpp"
+
+
+class Host  : public node
 {
     Q_OBJECT
 public:
-    explicit Host(std::string ip , QObject *parent = nullptr);
+    explicit Host(IP ip);
     packet * packetGenerator(std::string destiantionIp);
-private:
-    std::string IP;
-    wire *outputPort;
+
 };
 
 #endif // HOST_HPP

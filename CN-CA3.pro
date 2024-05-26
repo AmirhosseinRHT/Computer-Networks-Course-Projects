@@ -6,18 +6,19 @@ SOURCES += \
         controller.cpp \
         host.cpp \
         main.cpp \
+        node.cpp \
         packet.cpp \
-        router.cpp \
-        wire.cpp
+        router.cpp
 
 HEADERS += \
         Router.hpp \
         controller.hpp \
+        defs.hpp \
         forwardingRow.h \
         host.hpp \
+        node.hpp \
         packet.hpp \
-        router.hpp \
-        wire.hpp
+        router.hpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

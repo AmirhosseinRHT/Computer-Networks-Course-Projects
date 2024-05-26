@@ -2,20 +2,20 @@
 #define ROUTER_HPP
 
 #include <QObject>
-#include <string>
-#include "wire.hpp"
+#include "node.hpp"
+// #include "wire.hpp"
 #include "forwardingRow.h"
 
-class router : public QObject
+
+class router : public node
 {
     Q_OBJECT
 public:
-    explicit router(std::string ip , QObject *parent = nullptr);
-    void addPort(wire* port) { ports.push_back(port); }
+    explicit router(IP _ip);
+    void addPort(node* port);
 private:
-    std::string IP;
     std::vector<forwardingRow> forwardingTable;
-    std::vector<wire*> ports;
+    std::vector<node*> ports;
 };
 
 #endif // ROUTER_HPP
