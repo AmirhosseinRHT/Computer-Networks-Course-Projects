@@ -3,6 +3,7 @@ QT +=
 CONFIG += c++17 cmdline
 
 SOURCES += \
+        cluster.cpp \
         controller.cpp \
         host.cpp \
         main.cpp \
@@ -12,13 +13,14 @@ SOURCES += \
 
 HEADERS += \
         Router.hpp \
+        cluster.hpp \
         controller.hpp \
         defs.hpp \
-        forwardingRow.h \
         host.hpp \
         node.hpp \
         packet.hpp \
-        router.hpp
+        router.hpp \
+        tableRow.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

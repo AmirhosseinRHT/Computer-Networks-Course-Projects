@@ -1,7 +1,10 @@
 #include "router.hpp"
 
-router::router(std::string ip , QObject* parent)
-: QObject{parent}
-{
-    IP = ip;
-}
+router::router(IP _ip) :node(_ip) {}
+
+
+// void router::addPort(node* port)
+// {
+    // ports.push_back(port);
+// }
+

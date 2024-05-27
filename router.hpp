@@ -3,19 +3,17 @@
 
 #include <QObject>
 #include "node.hpp"
-// #include "wire.hpp"
-#include "forwardingRow.h"
-
+#include "tableRow.h"
+#include "packet.hpp"
 
 class router : public node
 {
-    Q_OBJECT
 public:
-    explicit router(IP _ip);
+    explicit router(IP _ip );
     void addPort(node* port);
 private:
-    std::vector<forwardingRow> forwardingTable;
-    std::vector<node*> ports;
+    QVector<route> routingTable;
+    QVector<forward> forwardingTable;
 };
 
 #endif // ROUTER_HPP

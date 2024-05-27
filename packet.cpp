@@ -1,20 +1,22 @@
 #include "packet.hpp"
 
-packet::packet(IP source ,IP dest ,IP _data ,QObject *parent):QObject{parent}
+packet::packet(IP source ,IP dest ,IP _data , PacketType _type)
 {
     sourceAddr = source;
     destinationAddr = dest;
     data = _data;
-    generateTime = QTime::currentTime().toString("hh:mm:ss").toStdString();
+    generateTime = QTime::currentTime().toString("hh:mm:ss");
+    type = _type;
 }
 
-std::string packet::getPacket(){
+
+QString packet::getPacket(){
     return data + "_" + destinationAddr + "_" + sourceAddr + "_" + generateTime;
 }
 
 void packet::printLog()
 {
     for(int i = 0 ; i < log.size(); i++)
-        std::cout << i << " : " << log[i] << std::endl;
+        qDebug() << i << " : " << log[i] << "\n";
 }
 
