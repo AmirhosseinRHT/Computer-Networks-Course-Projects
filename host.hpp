@@ -2,18 +2,19 @@
 #define HOST_HPP
 
 #include <QObject>
-#include "packet.hpp"
+#include "port.hpp"
 #include "node.hpp"
 #include "defs.hpp"
 
 
-class Host  : public node
+class Host : public Node
 {
     Q_OBJECT
 public:
-    explicit Host(IP ip);
-    packet * packetGenerator(IP destiantionIp);
-
+    explicit Host(IP ip , int portQueueSize);
+    ~Host();
+private:
+    Port * outport;
 };
 
 #endif // HOST_HPP

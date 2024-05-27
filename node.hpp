@@ -4,24 +4,20 @@
 #include <QObject>
 #include <QDebug>
 #include <QSharedPointer>
-#include <bits/unique_ptr.h>
-#include "defs.hpp"
 #include "packet.hpp"
+#include "defs.hpp"
 
-class node : public QObject
+class Node : public QObject
 {
     Q_OBJECT
 public:
-    explicit node(IP _ip, QObject *parent = nullptr);
-    void send(QSharedPointer<packet> pack);
+    explicit Node(IP _ip, QObject *parent = nullptr);
     void createPacket();
 private:
     IP ip;
 
 public slots:
-    void recievePacket(QSharedPointer<packet> pack);
-signals:
-    void sendPacket(QSharedPointer<packet> pack);
+    void onPulse();
 };
 
 #endif // NODE_HPP

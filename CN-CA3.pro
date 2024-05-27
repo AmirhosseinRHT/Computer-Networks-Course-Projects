@@ -9,16 +9,18 @@ SOURCES += \
         main.cpp \
         node.cpp \
         packet.cpp \
+        port.cpp \
         router.cpp
 
 HEADERS += \
-        Router.hpp \
         cluster.hpp \
+        router.hpp \
         controller.hpp \
         defs.hpp \
         host.hpp \
         node.hpp \
         packet.hpp \
+        port.hpp \
         router.hpp \
         tableRow.h
 

@@ -1,20 +1,21 @@
 #include "packet.hpp"
 
-packet::packet(IP source ,IP dest ,IP _data , PacketType _type)
+Packet::Packet(IP source ,IP dest ,IP _data , PacketType _type)
 {
     sourceAddr = source;
     destinationAddr = dest;
     data = _data;
     generateTime = QTime::currentTime().toString("hh:mm:ss");
     type = _type;
+    inQueueCycle = 0;
 }
 
 
-QString packet::getPacket(){
+QString Packet::getPacket(){
     return data + "_" + destinationAddr + "_" + sourceAddr + "_" + generateTime;
 }
 
-void packet::printLog()
+void Packet::printLog()
 {
     for(int i = 0 ; i < log.size(); i++)
         qDebug() << i << " : " << log[i] << "\n";

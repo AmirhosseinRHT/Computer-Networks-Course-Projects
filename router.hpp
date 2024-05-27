@@ -6,14 +6,19 @@
 #include "tableRow.h"
 #include "packet.hpp"
 
-class router : public node
+class Router : public Node
 {
 public:
-    explicit router(IP _ip );
-    void addPort(node* port);
+    explicit Router(IP _ip);
+    ~Router();
+    forward* createForwardingRow(IP hopID ,IP subnetMask ,IP subnetID, int queueSize);
+    void sendToPort(int portNum , QSharedPointer<Packet> pack);
+    Port* getPort(int num);
+    Port* getPort(IP ip);
+
 private:
     QVector<route> routingTable;
-    QVector<forward> forwardingTable;
+    QVector<forward *> forwardingTable;
 };
 
 #endif // ROUTER_HPP

@@ -2,7 +2,7 @@
 #define TABLEROW_H
 
 #include "defs.hpp"
-#include "node.hpp"
+#include "port.hpp"
 
 typedef struct{
     IP destination;
@@ -11,11 +11,10 @@ typedef struct{
 } route;
 
 typedef struct{
-    IP forwardingIP;
+    IP nextHopIP;
     IP subnetMask;
     IP subnetID;
-    int portNumber;
-    node * port;
+    Port * port;
 } forward;
 
 #endif // TABLEROW_H

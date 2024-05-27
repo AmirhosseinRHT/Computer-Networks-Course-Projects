@@ -4,11 +4,11 @@
 #include <QTime>
 #include "defs.hpp"
 
-class packet
+class Packet
 {
 public:
-    explicit packet(IP source ,IP dest ,QString _data  , PacketType _type);
-    virtual ~packet(){}
+    explicit Packet(IP source ,IP dest ,QString _data ,PacketType _type);
+    virtual ~Packet(){}
     QString getPacket();
     IP getDestiantionAddr() {return destinationAddr;}
     IP getSourceAddr() {return sourceAddr;}
@@ -21,6 +21,7 @@ public:
     void setTime(QString time){generateTime = time;}
     void setPacketType(PacketType t){ type = t;}
     void printLog();
+    void icreaseInQueueCycle(int val = 1){ inQueueCycle += val;}
 private:
     IP sourceAddr;
     IP destinationAddr;
@@ -28,6 +29,7 @@ private:
     PacketType type;
     QString generateTime;
     QVector<QString> log;
+    int inQueueCycle;
 };
 
 #endif // PACKET_HPP

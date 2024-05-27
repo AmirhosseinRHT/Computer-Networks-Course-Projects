@@ -1,6 +1,6 @@
 #include "cluster.hpp"
 
-cluster::cluster(ClusterType _type, QObject *parent): QObject{parent}
+Cluster::Cluster(ClusterType _type, QObject *parent): QObject{parent}
 {
     type = _type;
 }
