@@ -15,10 +15,12 @@ public:
     void sendToPort(int portNum , QSharedPointer<Packet> pack);
     Port* getPort(int num);
     Port* getPort(IP ip);
-
+    IP requestIP(int portNum);
+    bool giveBackIP(QString ip);
 private:
     QVector<route> routingTable;
     QVector<forward *> forwardingTable;
+    QVector<QPair<int,IP>> assignedIPs;
 };
 
 #endif // ROUTER_HPP

@@ -1,19 +1,28 @@
 #include "node.hpp"
+#include "packet.hpp"
 
 Node::Node(IP _ip , QObject *parent): QObject{parent}
 {
     ip = _ip;
 }
 
-// void node::send(QSharedPointer<packet> pack)
-// {
-//     emit sendPacket(pack);
-// }
+// void onPulse(){}
 
-// void node::recievePacket(QSharedPointer<packet> pack)
-// {
-//     qDebug() << "got : " << pack->getPacket() << "\n";
-// }
+QVector<int> Node::splitIp(QString ip)
+{
+    QStringList parts = ip.split('.');
+    QVector<int> result;
+
+    for (const QString& part : parts)
+    {
+        bool ok;
+        int num = part.toInt(&ok);
+        if (ok)
+            result.append(num);
+    }
+    return result;
+}
+
 
 void Node::createPacket()
 {

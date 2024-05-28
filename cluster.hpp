@@ -11,6 +11,8 @@ class Cluster : public QObject
     Q_OBJECT
 public:
     explicit Cluster(ClusterType _Type  , QObject *parent = nullptr);
+    void createMeshCluster();
+    void createRingStarCluster();
 private:
     ClusterType type;
     QVector<Router *> routers;

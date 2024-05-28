@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QDebug>
 #include <QSharedPointer>
-#include "packet.hpp"
 #include "defs.hpp"
 
 class Node : public QObject
@@ -13,11 +12,12 @@ class Node : public QObject
 public:
     explicit Node(IP _ip, QObject *parent = nullptr);
     void createPacket();
+    QVector<int> splitIp(QString ip);
 private:
     IP ip;
 
 public slots:
-    void onPulse();
+    // void onPulse();
 };
 
 #endif // NODE_HPP

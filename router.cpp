@@ -39,4 +39,26 @@ Port * Router::getPort(IP ip)
     return NULL;
 }
 
+IP Router::requestIP(int portNum)
+{
+    for(int i = 0 ; i < assignedIPs.size(); i++)
+        if(assignedIPs[i].first == portNum)
+            return assignedIPs[i].second;
+    QVector<int> temp = splitIp(assignedIPs[assignedIPs.size()-1].second);
+    if(temp[3] >= 255)
+        return NULL; //no capacity
+    temp[3]++;
+    QString newIP = QString::number(temp[0])+"."+QString::number(temp[1])+"."+QString::number(temp[2])+"."+QString::number(temp[3]);
+    assignedIPs.append(QPair<int,QString> (portNum , newIP));
+    return newIP;
+}
 
+bool Router::giveBackIP(QString ip)
+{
+    for (int i = 0; i < assignedIPs.size(); i++)
+        if(assignedIPs[i].second == ip){
+            assignedIPs.removeAt(i);
+            return true;
+        }
+    return false;
+}

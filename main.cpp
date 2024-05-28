@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
     // Start the threads
     thread1.start();
     thread2.start();
+    /////////////////////////////////////////
     Packet pack1("192.168.1.2" , "192.168.1.3" , "hello from 2 to 3" , Data);
     Packet pack2("192.168.1.3" , "192.168.1.2" , "hello from 3 to 2" , Data);
     (*p1).sendPacket(QSharedPointer<Packet>::create(pack1));
