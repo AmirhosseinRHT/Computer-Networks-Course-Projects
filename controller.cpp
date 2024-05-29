@@ -5,14 +5,11 @@ Controller::Controller(QObject * parent): QObject{parent}
 {}
 
 
-
 void Controller::main()
 {
     while(true)
     {
         emit Pulse();
-
-        // QObject().thread()->usleep();
-        // _sleep(100);
+        QThread::msleep(1000);
     }
 }

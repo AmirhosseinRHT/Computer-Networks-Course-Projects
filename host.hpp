@@ -11,8 +11,9 @@ class Host : public Node
 {
     Q_OBJECT
 public:
-    explicit Host(IP ip , int portQueueSize);
+    explicit Host(IP ip ,IPversion v , int portQueueSize);
     ~Host();
+    Port * getPort() {return outport;}
 private:
     Port * outport;
 };

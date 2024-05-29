@@ -10,14 +10,15 @@ class Node : public QObject
 {
     Q_OBJECT
 public:
-    explicit Node(IP _ip, QObject *parent = nullptr);
+    explicit Node(IP _ip,IPversion v,QObject *parent = nullptr);
     void createPacket();
     QVector<int> splitIp(QString ip);
+    IPversion ver;
 private:
     IP ip;
 
 public slots:
-    // void onPulse();
+    void onPulse();
 };
 
 #endif // NODE_HPP

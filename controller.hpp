@@ -2,6 +2,7 @@
 #define CONTROLLER_HPP
 
 #include <QObject>
+#include "cluster.hpp"
 
 class Controller : public QObject
 {

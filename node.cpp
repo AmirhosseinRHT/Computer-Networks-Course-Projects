@@ -1,12 +1,13 @@
 #include "node.hpp"
 #include "packet.hpp"
 
-Node::Node(IP _ip , QObject *parent): QObject{parent}
+Node::Node(IP _ip ,IPversion v , QObject *parent): QObject{parent}
 {
     ip = _ip;
+    ver = v;
 }
 
-// void onPulse(){}
+void Node::onPulse(){}
 
 QVector<int> Node::splitIp(QString ip)
 {

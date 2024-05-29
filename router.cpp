@@ -1,6 +1,6 @@
 #include "router.hpp"
 
-Router::Router(IP _ip) :Node(_ip) {}
+Router::Router(IP _ip,IPversion v) :Node(_ip ,v) {}
 
 Router::~Router()
 {

@@ -21,6 +21,7 @@ public:
     void setTime(QString time){generateTime = time;}
     void setPacketType(PacketType t){ type = t;}
     void printLog();
+
     void icreaseInQueueCycle(int val = 1){ inQueueCycle += val;}
 private:
     IP sourceAddr;

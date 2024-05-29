@@ -1,6 +1,6 @@
 #include "host.hpp"
 
-Host::Host(IP _ip , int portQueueSize): Node(_ip)
+Host::Host(IP _ip ,IPversion v ,int portQueueSize): Node(_ip , v)
 {
     outport = new Port(portQueueSize);
 }

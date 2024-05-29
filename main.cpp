@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
     QThread thread1 , thread2;
 
     // Create the Router objects
-    Router router1("test1");
-    Router router2("test2");
+    Router router1("test1" , IPV4);
+    Router router2("test2" , IPV4);
     Port * p1 = router1.createForwardingRow("1" , "255" , "0" , 10)->port;
     Port * p2 = router2.createForwardingRow("2" , "255" , "0", 10)->port;
     // Move the Router objects to their respective threads
@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     Packet pack2("192.168.1.3" , "192.168.1.2" , "hello from 3 to 2" , Data);
     (*p1).sendPacket(QSharedPointer<Packet>::create(pack1));
     (*p2).sendPacket(QSharedPointer<Packet>::create(pack2));
+
     return a.exec();
 }
 
