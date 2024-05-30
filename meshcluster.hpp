@@ -14,7 +14,6 @@ public:
     QVector<Router*> getEdgeRouters();
     void createMeshCluster();
     void createMeshRoutersAndHosts();
-    // void connectRouterInMesh( int j, int i);
     void moveNodesToThread();
     void connectAllRouters();
     void connectHostsToRouters();

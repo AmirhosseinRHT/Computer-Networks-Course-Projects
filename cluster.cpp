@@ -40,30 +40,3 @@ void Cluster::connectRouterToHost(Router * r , Host * h)
     connectPorts(p1,p2);
 }
 
-
-// void Cluster::createMeshCluster()
-// {
-//     for(int i = 0 ; i < 23; i++)
-//         threads.append(new QThread);
-
-//     for(int i = 0 ; i < 15 ; i++)
-//     {
-//         routers.append(new Router("192.168." +QString::number(i+1) + ".1" , IPV4));
-//         routers[i]->createForwardingRow("0" , "255" , "1" , 10);
-//         routers[i]->createForwardingRow("1" , "255" , "1" , 10);
-//         if(i != 3)
-//             routers[i]->createForwardingRow("2" , "255" , "1" , 10);
-//         if(i%4 == 1 || i%4 ==2)
-//             routers[i]->createForwardingRow("3" , "255" , "1" , 10);
-//         if(i == 13 || i == 14)
-//             routers[i]->createForwardingRow("4" , "255" , "1" , 10);
-//         routers[i]->moveToThread(threads[i]);
-//     }
-//     for(int i = 0 ; i < 8 ; i++)
-//     {
-//         hosts.append(new Host(QString::number(i) , IPV4 , 10));
-//         hosts[i]->moveToThread(threads[i+15]);
-//     }
-
-// }
-

@@ -1,4 +1,5 @@
 #include "router.hpp"
+#include <QHostAddress>
 
 Router::Router(IP _ip,IPversion v ,int _portQueueSize) :Node(_ip ,v , _portQueueSize) {}
 
@@ -9,6 +10,23 @@ Router::~Router()
         delete forwardingTable[i]->port;
         delete forwardingTable[i];
     }
+}
+
+IP Router::convertIPv6ToIPv4(IP ipv6Address) {
+    QHostAddress ipv6Addr(ipv6Address);
+    if (ipv6Addr.protocol() != QAbstractSocket::IPv6Protocol)
+        return QString();
+    QHostAddress ipv4Addr = QHostAddress(ipv6Addr.toIPv6Address());
+    return ipv4Addr.toString();
+}
+
+IP Router::convertIPv4ToIPv6(IP ipv4Address)
+{
+    QHostAddress ipv4Addr(ipv4Address);
+    if (ipv4Addr.protocol() != QAbstractSocket::IPv4Protocol)
+        return QString();
+    QHostAddress ipv6Addr = QHostAddress(ipv4Addr.toIPv6Address());
+    return ipv6Addr.toString();
 }
 
 forward* Router::createForwardingRow(IP hopID ,IP subnetMask ,IP subnetID , int queueSize)
@@ -61,4 +79,45 @@ bool Router::giveBackIP(QString ip)
             return true;
         }
     return false;
+}
+
+void Router::roundRobinPacketHandler()
+{
+    while(true)
+    {
+        int emptyQueuesCount= 0;
+        for (int i = 0; i < forwardingTable.size(); i++)
+        {
+            if(forwardingTable[i]->port->isQueueEmpty())
+            {
+                emptyQueuesCount++;
+                continue;
+            }
+            handleDequeuedPacket(forwardingTable[i]->port->dequeue() , i);
+        }
+        if(emptyQueuesCount == forwardingTable.size())
+            break;
+    }
+}
+
+void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
+{
+    if(p->getType() == DHCP)
+    {
+        if(p->getData() == "IP_REQUEST")
+        {
+            IP achievedIp = requestIP(portNum);
+            if(!achievedIp.isNull())
+            {
+                Packet pack(ip , achievedIp , achievedIp , DHCP);
+                forwardingTable[portNum]->nextHopIP = achievedIp;
+                forwardingTable[portNum]->port->sendPacket(QSharedPointer<Packet>::create(pack));
+            }
+        }
+        else if(p->getData() == "IP_GIVEBACK")
+        {
+            giveBackIP(p->getSourceAddr());
+            forwardingTable[portNum]->nextHopIP = "0";
+        }
+    }
 }

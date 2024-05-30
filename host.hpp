@@ -14,6 +14,7 @@ public:
     explicit Host(IP ip ,IPversion v  , int _portQueueSize);
     ~Host();
     Port * getPort() {return port;}
+    void getIpFromDHCP();
 private:
     Port * port;
 };

@@ -1,5 +1,5 @@
 QT = core
-QT +=
+QT += network
 CONFIG += c++17 cmdline
 
 SOURCES += \

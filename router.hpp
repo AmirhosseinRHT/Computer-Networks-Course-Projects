@@ -17,6 +17,8 @@ public:
     Port* getPort(IP ip);
     IP requestIP(int portNum);
     bool giveBackIP(QString ip);
+    IP convertIPv4ToIPv6(IP ipv4Address);
+    IP convertIPv6ToIPv4(IP ipv6Address);
 private:
     QVector<route> routingTable;
     QVector<forward *> forwardingTable;
