@@ -1,11 +1,11 @@
 #include "host.hpp"
 
-Host::Host(IP _ip ,IPversion v ,int portQueueSize): Node(_ip , v)
+Host::Host(IP _ip ,IPversion v ,int _portQueueSize): Node(_ip , v , _portQueueSize)
 {
-    outport = new Port(portQueueSize);
+    port = new Port(_portQueueSize);
 }
 
 Host::~Host()
 {
-    delete outport;
+    delete port;
 }

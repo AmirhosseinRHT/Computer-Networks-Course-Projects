@@ -1,6 +1,6 @@
 #include "router.hpp"
 
-Router::Router(IP _ip,IPversion v) :Node(_ip ,v) {}
+Router::Router(IP _ip,IPversion v ,int _portQueueSize) :Node(_ip ,v , _portQueueSize) {}
 
 Router::~Router()
 {

@@ -7,13 +7,17 @@ SOURCES += \
         controller.cpp \
         host.cpp \
         main.cpp \
+        meshcluster.cpp \
         node.cpp \
         packet.cpp \
         port.cpp \
+        ringstarcluster.cpp \
         router.cpp
 
 HEADERS += \
         cluster.hpp \
+        meshcluster.hpp \
+        ringstarcluster.hpp \
         router.hpp \
         controller.hpp \
         defs.hpp \

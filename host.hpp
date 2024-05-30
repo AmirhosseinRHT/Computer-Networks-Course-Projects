@@ -11,11 +11,11 @@ class Host : public Node
 {
     Q_OBJECT
 public:
-    explicit Host(IP ip ,IPversion v , int portQueueSize);
+    explicit Host(IP ip ,IPversion v  , int _portQueueSize);
     ~Host();
-    Port * getPort() {return outport;}
+    Port * getPort() {return port;}
 private:
-    Port * outport;
+    Port * port;
 };
 
 #endif // HOST_HPP

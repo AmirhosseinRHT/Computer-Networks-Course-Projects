@@ -9,7 +9,7 @@
 class Router : public Node
 {
 public:
-    explicit Router(IP _ip ,IPversion v);
+    explicit Router(IP _ip ,IPversion v , int _portQueueSize);
     ~Router();
     forward* createForwardingRow(IP hopID ,IP subnetMask ,IP subnetID, int queueSize);
     void sendToPort(int portNum , QSharedPointer<Packet> pack);

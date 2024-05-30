@@ -1,10 +1,11 @@
 #include "node.hpp"
 #include "packet.hpp"
 
-Node::Node(IP _ip ,IPversion v , QObject *parent): QObject{parent}
+Node::Node(IP _ip ,IPversion v  , int _portQueueSize, QObject *parent): QObject{parent}
 {
     ip = _ip;
     ver = v;
+    portQueueSize = _portQueueSize;
 }
 
 void Node::onPulse(){}
