@@ -19,6 +19,8 @@ public:
     bool giveBackIP(QString ip);
     IP convertIPv4ToIPv6(IP ipv4Address);
     IP convertIPv6ToIPv4(IP ipv6Address);
+    void roundRobinPacketHandler();
+    void handleDequeuedPacket(QSharedPointer<Packet> p , int portNum);
 private:
     QVector<route> routingTable;
     QVector<forward *> forwardingTable;

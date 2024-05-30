@@ -21,6 +21,7 @@ public:
     QVector<Host *> getHosts() {return hosts;}
     void createThreads(int n);
     IP getBaseIP(){return baseIP;}
+    void startRequestingIpFromDHCP();
 private:
     ClusterType type;
     IP baseIP;

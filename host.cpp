@@ -15,3 +15,5 @@ void Host::getIpFromDHCP()
         Packet pack("0" , "0" , "IP_REQUEST" , DHCP);
         port->sendPacket(QSharedPointer<Packet>::create(pack));
 }
+
+
