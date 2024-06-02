@@ -15,6 +15,7 @@ public:
     QVector<int> splitIp(QString ip);
     IPversion ver;
     int getPortQueueSize(){return portQueueSize;};
+    QVector<QString> splitPacket(QString str, char del);
 protected:
     IP ip;
     int portQueueSize;
