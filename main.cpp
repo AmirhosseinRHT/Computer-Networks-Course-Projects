@@ -8,17 +8,6 @@
 #include <QString>
 #include <QTextStream>
 
-// void moveNodesToThread(QVector<QThread *> threads , QVector <Host *> hosts , QVector <Router *> routers) {
-//     for (int i=0; i< n; i++)
-//         for (int j = 0 ; j < n; j++)
-//             routers[i][j]->moveToThread(threads[i*4 + j]);
-//     for(int i=0 ; i < 2 * n ; i++)
-//         hosts[i]->moveToThread(threads[n*n + i]);
-//     for(int i = 0 ; i < threads.size() ; i ++ )
-//     {
-//         threads[i]->start();
-//     }
-// }
 
 int main(int argc, char *argv[])
 {
