@@ -18,7 +18,7 @@ public:
 private:
     Port * port;
 public slots:
-    void onClock();
+    void onClock() override;
 };
 
 #endif // HOST_HPP

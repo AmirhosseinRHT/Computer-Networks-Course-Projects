@@ -2,9 +2,11 @@
 #include <QTime>
 #include <QThread>
 
-Signaller::Signaller(QObject *parent)
+Signaller::Signaller(int _clockLength , QObject *parent)
     : QObject{parent}
-{}
+{
+    clockLength = _clockLength;
+}
 
 void Signaller::main()
 {
@@ -12,6 +14,6 @@ void Signaller::main()
     {
         qDebug() << "emitter emitted";
         emit Clock();
-        QThread::msleep(100000);
+        QThread::msleep(clockLength);
     }
 }

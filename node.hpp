@@ -21,7 +21,7 @@ protected:
     int portQueueSize;
 
 public slots:
-    // virtual void onClock();
+    virtual void onClock(){};
 };
 
 #endif // NODE_HPP

@@ -40,13 +40,13 @@ void moveMeshNodesToThread(QVector <QThread * > mThreads ,  MeshCluster * m ,int
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-
     Controller * controller = new Controller("192.168" , "192.170" , 4);
-    Signaller * signaller = new Signaller();
+    Signaller * signaller = new Signaller(5000);
     controller->ConnectClockToNodes(signaller);
     QThread th1;
     signaller->moveToThread(&th1);
-    QVector <QThread * > RsThreads ,  mThreads;
+    th1.start();
+    // QVector <QThread * > RsThreads ,  mThreads;
     // moveRingStarNodesToThread(RsThreads , controller->getRingStarCluster());
     // moveMeshNodesToThread(mThreads , controller->getMeshCluster() , 4);
     signaller->main();

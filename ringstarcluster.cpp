@@ -21,12 +21,12 @@ RingStarCluster::~RingStarCluster()
 void RingStarCluster::moveNodesToThread()
 {
     for(int i = 0 ; i < 5 ; i++)
-        hosts[i]->moveToThread(threads[i+8]);
+        hosts[i]->moveToThread(this->thread());
     for (int i = 0; i < 8; i++)
-        routers[i]->moveToThread(threads[i]);
+        routers[i]->moveToThread(this->thread());
     for(int i = 0 ; i < threads.size() ; i ++ )
     {
-        threads[i]->start();
+        // threads[i]->start();
     }
 }
 
@@ -66,5 +66,5 @@ void RingStarCluster::createRingStarCluster()
 
     connectRingStarPorts();
 
-    // moveNodesToThread();
+    moveNodesToThread();
 }

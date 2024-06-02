@@ -8,8 +8,6 @@ Node::Node(IP _ip ,IPversion v  , int _portQueueSize, QObject *parent): QObject{
     portQueueSize = _portQueueSize;
 }
 
-// void Node::onClock(){}
-
 QVector<QString> Node::splitPacket(QString str, char del)
 {
     QVector<QString> resulte_vector;

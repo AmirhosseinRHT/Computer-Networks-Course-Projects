@@ -27,7 +27,7 @@ private:
     QVector<QPair<int,IP>> assignedIPs;
     void updateDistanceVec(QSharedPointer<Packet> p , int portNum);
 public slots:
-    void onClock();
+    void onClock() override;
 };
 
 #endif // ROUTER_HPP
