@@ -4,6 +4,7 @@
 #include <QObject>
 #include "meshcluster.hpp"
 #include "ringstarcluster.hpp"
+#include "signaller.hpp"
 
 class Controller : public QObject
 {
@@ -14,7 +15,7 @@ public:
    void main();
    MeshCluster * getMeshCluster(){return mCluster;}
    RingStarCluster * getRingStarCluster(){return rsCluster;}
-   void ConnectClockToNodes();
+   void ConnectClockToNodes(Signaller * signaller);
 private:
     MeshCluster * mCluster;
     RingStarCluster * rsCluster;

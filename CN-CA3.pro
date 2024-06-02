@@ -12,7 +12,8 @@ SOURCES += \
         packet.cpp \
         port.cpp \
         ringstarcluster.cpp \
-        router.cpp
+        router.cpp \
+        signaller.cpp
 
 HEADERS += \
         cluster.hpp \
@@ -26,6 +27,7 @@ HEADERS += \
         packet.hpp \
         port.hpp \
         router.hpp \
+        signaller.hpp \
         tableRow.h
 
 # Default rules for deployment.

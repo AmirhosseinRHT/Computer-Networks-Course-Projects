@@ -19,15 +19,6 @@ MeshCluster::~MeshCluster()
 }
 
 
-void MeshCluster::createMeshCluster()
-{
-    Cluster::createThreads(n *(n + 2));
-    createMeshRoutersAndHosts();
-    connectAllRouters();
-    connectHostsToRouters();
-    moveNodesToThread();
-}
-
 void MeshCluster::createMeshRoutersAndHosts() {
     for (int i = 0; i < n ; i++){
         QVector<Router*> temp;
@@ -73,7 +64,24 @@ void MeshCluster::moveNodesToThread() {
             routers[i][j]->moveToThread(threads[i*4 + j]);
     for(int i=0 ; i < 2 * n ; i++)
         hosts[i]->moveToThread(threads[n*n + i]);
+    for(int i = 0 ; i < threads.size() ; i ++ )
+    {
+        threads[i]->start();
+    }
 }
+
+void MeshCluster::createMeshCluster()
+{
+    Cluster::createThreads(n *(n + 2));
+    createMeshRoutersAndHosts();
+
+
+    connectAllRouters();
+    connectHostsToRouters();
+
+    // moveNodesToThread();
+}
+
 
 
 

@@ -19,21 +19,23 @@ Controller::~Controller()
 }
 
 
-void Controller::ConnectClockToNodes()
+void Controller::ConnectClockToNodes(Signaller * signaller)
 {
     QVector <Host*>hosts = mCluster->getHosts();
     for(int i = 0 ; i < hosts.size() ; i ++ )
-    QObject::connect((this), &Controller::Clock, hosts[i], &Host::onClock);
+    QObject::connect(signaller, &Signaller::Clock, hosts[i], &Host::onClock);
     hosts = rsCluster->getHosts();
     for(int i = 0 ; i < hosts.size() ; i ++ )
-        QObject::connect((this), &Controller::Clock, hosts[i], &Host::onClock);
+        QObject::connect(signaller, &Signaller::Clock, hosts[i], &Host::onClock);
     QVector <Router *> rsrouters = rsCluster->getRouters();
     for(int i = 0 ; i < rsrouters.size() ; i ++ )
-        QObject::connect((this), &Controller::Clock, rsrouters[i], &Router::onClock);
+        QObject::connect(signaller, &Signaller::Clock, rsrouters[i], &Router::onClock);
     QVector <QVector <Router *>>mrouters = mCluster->getRouters();
     for(int i = 0 ; i < mrouters.size() ; i ++ )
         for(int j = 0 ; j < mrouters[i].size() ; j++)
-            QObject::connect((this), &Controller::Clock, mrouters[i][j], &Router::onClock);
+            QObject::connect(signaller, &Signaller::Clock, mrouters[i][j], &Router::onClock);
+    // mCluster->moveNodesToThread();
+    // rsCluster->moveNodesToThread();
 }
 
 

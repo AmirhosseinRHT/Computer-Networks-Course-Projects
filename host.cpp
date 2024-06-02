@@ -12,7 +12,7 @@ Host::~Host()
 
 void Host::onClock()
 {
-    qDebug() << "wdfnhiserojopd\n";
+    qDebug() << "host got clock\n";
     getIpFromDHCPServer();
 }
 
