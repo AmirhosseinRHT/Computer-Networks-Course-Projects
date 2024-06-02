@@ -8,7 +8,6 @@ Port::Port(int maxq , QObject *parent): QObject{parent}
 void Port::sendPacket(QSharedPointer<Packet> pack)
 {
     emit newPacketArrived(pack);
-            qDebug() << "host sent packet\n";
 }
 
 void Port::updateMaxQueueSize(int newSize)

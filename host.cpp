@@ -12,7 +12,6 @@ Host::~Host()
 
 void Host::onClock()
 {
-    qDebug() << "host got clock\n";
     getIpFromDHCPServer();
 }
 

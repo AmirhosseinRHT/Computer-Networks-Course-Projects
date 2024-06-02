@@ -12,6 +12,6 @@ void Signaller::main()
     {
         qDebug() << "emitter emitted";
         emit Clock();
-        QThread::msleep(5000);
+        QThread::msleep(100000);
     }
 }

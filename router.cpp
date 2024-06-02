@@ -1,7 +1,9 @@
 #include "router.hpp"
 #include <QHostAddress>
 
-Router::Router(IP _ip,IPversion v ,int _portQueueSize) :Node(_ip ,v , _portQueueSize) {}
+Router::Router(IP _ip,IPversion v ,int _portQueueSize) :Node(_ip ,v , _portQueueSize) {
+    assignedIPs.append(QPair<int,QString> (-1 , ip));
+}
 
 Router::~Router()
 {
@@ -31,7 +33,7 @@ IP Router::convertIPv4ToIPv6(IP ipv4Address)
 
 void Router::onClock()
 {
-    qDebug() << "router " + ip + " got clock";
+    // qDebug() << "router " + ip + " got clock";
     roundRobinPacketHandler();
 }
 
@@ -112,12 +114,9 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
     {
         if(p->getData() == "IP_REQUEST")
         {
-            qDebug() << "Fgfgfgsfafdfgfgfsfd\n";
             IP achievedIp = requestIP(portNum);
-            qDebug() << "acieved : " << achievedIp;
             if(!achievedIp.isNull())
             {
-                qDebug() << "Fgfgfgsfafdfgfgfsfd2222222222222222222222222222222\n";
                 Packet pack(ip , achievedIp , achievedIp , DHCP);
                 forwardingTable[portNum]->nextHopIP = achievedIp;
                 forwardingTable[portNum]->port->sendPacket(QSharedPointer<Packet>::create(pack));

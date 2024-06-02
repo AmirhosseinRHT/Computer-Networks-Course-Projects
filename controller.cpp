@@ -1,15 +1,15 @@
 #include "controller.hpp"
 #include <QTime>
 
-Controller::Controller(IP _ringStartBaseIP , IP _meshBaseIP , int _MeshSize , QObject * parent): QObject{parent}
+Controller::Controller(IP _ringStarBaseIP , IP _meshBaseIP , int _MeshSize , QObject * parent): QObject{parent}
 {
-    rsCluster= new RingStarCluster(RingStar , _ringStartBaseIP);
+    rsCluster= new RingStarCluster(RingStar , _ringStarBaseIP);
     rsCluster->createRingStarCluster();
     mCluster= new MeshCluster(Mesh , _meshBaseIP , _MeshSize);
     mCluster->createMeshCluster();
     meshSize = _MeshSize;
     meshBaseIP = _meshBaseIP;
-    ringStarBaseIP = _ringStartBaseIP;
+    ringStarBaseIP = _ringStarBaseIP;
 }
 
 Controller::~Controller()

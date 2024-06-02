@@ -1,12 +1,40 @@
 #include <QCoreApplication>
-// #include "ringstarcluster.hpp"
-// #include "meshcluster.hpp"
 #include "controller.hpp"
 #include <QThread>
-
 #include <QHostAddress>
 #include <QString>
 #include <QTextStream>
+
+void moveRingStarNodesToThread(QVector <QThread * > RsThreads ,  RingStarCluster * rs)
+{
+    QVector <Router *> routers =rs->getRouters();
+    QVector <Host *> hosts =rs->getHosts();
+    for(int i = 0 ; i < 13 ; i ++)
+        RsThreads.append(new QThread());
+    for(int i = 0 ; i < 5 ; i++)
+        hosts[i]->moveToThread(RsThreads[i+8]);
+    for (int i = 0; i < 8; i++)
+        routers[i]->moveToThread(RsThreads[i]);
+    for(int i = 0 ; i < RsThreads.size() ; i ++ )
+        RsThreads[i]->start();
+}
+
+void moveMeshNodesToThread(QVector <QThread * > mThreads ,  MeshCluster * m ,int n)
+{
+    QVector <QVector<Router *>> routers =m->getRouters();
+    QVector <Host *> hosts =m->getHosts();
+    for(int i = 0 ; i < n * (n + 2); i++)
+        mThreads.append(new QThread);
+    for (int i=0; i< n; i++)
+        for (int j = 0 ; j < n; j++)
+            routers[i][j]->moveToThread(mThreads[i*4 + j]);
+    for(int i=0 ; i < 2 * n ; i++)
+        hosts[i]->moveToThread(mThreads[n*n + i]);
+    for(int i = 0 ; i < mThreads.size() ; i ++ )
+    {
+        mThreads[i]->start();
+    }
+}
 
 
 int main(int argc, char *argv[])
@@ -14,23 +42,16 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     Controller * controller = new Controller("192.168" , "192.170" , 4);
-    Signaller * s = new Signaller();
-    controller->ConnectClockToNodes(s);
-    QThread th1  , th2;
-    s->moveToThread(&th1);
-    // controller->moveToThread(&th2);
-    QVector <QThread * > threads;
-    for(int i = 0 ; i < 13 ; i ++)
-        threads.append(new QThread());
-    for(int i = 0 ; i < 5 ; i++)
-        controller->getRingStarCluster()->getHosts()[i]->moveToThread(threads[i+8]);
-    for (int i = 0; i < 8; i++)
-        controller->getRingStarCluster()->getRouters()[i]->moveToThread(threads[i]);
-    for(int i = 0 ; i < threads.size() ; i ++ )
-    {
-        threads[i]->start();
-    }
-    s->main();
+    Signaller * signaller = new Signaller();
+    controller->ConnectClockToNodes(signaller);
+    QThread th1;
+    signaller->moveToThread(&th1);
+    QVector <QThread * > RsThreads ,  mThreads;
+    // moveRingStarNodesToThread(RsThreads , controller->getRingStarCluster());
+    // moveMeshNodesToThread(mThreads , controller->getMeshCluster() , 4);
+    signaller->main();
+
+
     // //////
     // // QVector <Host*>hosts = controller->getMeshCluster()->getHosts();
 
