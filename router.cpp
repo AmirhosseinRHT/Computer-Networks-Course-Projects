@@ -137,5 +137,8 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
     default:{
 
     }
+}
+
+void Router::updateDistanceVec(QSharedPointer<Packet> p , int portNum){
 
 }

@@ -25,6 +25,7 @@ private:
     QVector<route> routingTable;
     QVector<forward *> forwardingTable;
     QVector<QPair<int,IP>> assignedIPs;
+    void updateDistanceVec(QSharedPointer<Packet> p , int portNum);
 public slots:
     void onClock();
 };
