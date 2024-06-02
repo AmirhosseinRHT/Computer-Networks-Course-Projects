@@ -22,8 +22,8 @@ void Cluster::createThreads(int n)
 
 void Cluster::connectPorts(Port * p1 , Port * p2)
 {
-    QObject::connect(&(*p1), &Port::newPacketArrived, &(*p2), &Port::recievePacket);
-    QObject::connect(&(*p2), &Port::newPacketArrived, &(*p1), &Port::recievePacket);
+    QObject::connect(p1, &Port::newPacketArrived, p2, &Port::recievePacket);
+    QObject::connect(p2, &Port::newPacketArrived, p1, &Port::recievePacket);
 }
 
 

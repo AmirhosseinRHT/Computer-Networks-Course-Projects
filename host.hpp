@@ -14,9 +14,11 @@ public:
     explicit Host(IP ip ,IPversion v  , int _portQueueSize);
     ~Host();
     Port * getPort() {return port;}
-    void getIpFromDHCP();
+    void getIpFromDHCPServer();
 private:
     Port * port;
+public slots:
+    void onClock();
 };
 
 #endif // HOST_HPP

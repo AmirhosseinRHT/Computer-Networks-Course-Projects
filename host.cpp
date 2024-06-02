@@ -10,7 +10,13 @@ Host::~Host()
     delete port;
 }
 
-void Host::getIpFromDHCP()
+void Host::onClock()
+{
+    qDebug() << "wdfnhiserojopd\n";
+    getIpFromDHCPServer();
+}
+
+void Host::getIpFromDHCPServer()
 {
         Packet pack("0" , "0" , "IP_REQUEST" , DHCP);
         port->sendPacket(QSharedPointer<Packet>::create(pack));

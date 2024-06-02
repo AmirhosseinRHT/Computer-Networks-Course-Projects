@@ -10,9 +10,11 @@ class Controller : public QObject
     Q_OBJECT
 public:
    explicit Controller(IP _ringStartBaseIP , IP _meshBaseIP , int _MeshSize , QObject * parent = nullptr);
-    void main();
+   ~Controller();
+   void main();
    MeshCluster * getMeshCluster(){return mCluster;}
    RingStarCluster * getRingStarCluster(){return rsCluster;}
+   void ConnectClockToNodes();
 private:
     MeshCluster * mCluster;
     RingStarCluster * rsCluster;

@@ -14,9 +14,9 @@ public:
     void createRingStarCluster();
     QVector <Router *> getEdgeRouters();
     QVector <Router *> getRouters() {return routers;};
-    void moveHostsToThread();
+    void moveNodesToThread();
     void createThreads();
-    void createRoutersAndPorts();
+    void createRoutersAndHosts();
     void connectRingStarPorts();
 
 private:

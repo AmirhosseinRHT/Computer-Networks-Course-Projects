@@ -18,22 +18,20 @@ RingStarCluster::~RingStarCluster()
         delete routers[i];
 }
 
-void RingStarCluster::moveHostsToThread()
+void RingStarCluster::moveNodesToThread()
 {
     for(int i = 0 ; i < 5 ; i++)
-    {
-        hosts.append(new Host(QString::number(i) , IPV4 , 10));
         hosts[i]->moveToThread(threads[i+8]);
-    }
+    for (int i = 0; i < 8; i++)
+        routers[i]->moveToThread(threads[i]);
 }
 
-void RingStarCluster::createRoutersAndPorts()
+void RingStarCluster::createRoutersAndHosts()
 {
     for(int i = 0 ; i < 8 ; i++)
-    {
         routers.append(new Router(getBaseIP() + "." + QString::number(i+1) + ".1" , IPV4 , 10));
-        routers[i]->moveToThread(threads[i]);
-    }
+    for(int i = 0 ; i < 5 ; i++)
+        hosts.append(new Host(QString::number(i) , IPV4 , 10));
 }
 
 void RingStarCluster::connectRingStarPorts()
@@ -60,7 +58,7 @@ void RingStarCluster::connectRingStarPorts()
 void RingStarCluster::createRingStarCluster()
 {
     Cluster::createThreads(13);
-    createRoutersAndPorts();
-    moveHostsToThread();
+    createRoutersAndHosts();
+    moveNodesToThread();
     connectRingStarPorts();
 }

@@ -25,6 +25,8 @@ private:
     QVector<route> routingTable;
     QVector<forward *> forwardingTable;
     QVector<QPair<int,IP>> assignedIPs;
+public slots:
+    void onClock();
 };
 
 #endif // ROUTER_HPP

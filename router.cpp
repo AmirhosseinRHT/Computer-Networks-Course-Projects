@@ -29,12 +29,18 @@ IP Router::convertIPv4ToIPv6(IP ipv4Address)
     return ipv6Addr.toString();
 }
 
+void Router::onClock()
+{
+    qDebug() << "router " + ip;
+    roundRobinPacketHandler();
+}
+
 forward* Router::createForwardingRow(IP hopID ,IP subnetMask ,IP subnetID , int queueSize)
 {
     Port *p = new Port(queueSize);
     forward * f = new forward{hopID , subnetMask , subnetID , p};
     forwardingTable.append(f);
-    return forwardingTable[0];
+    return forwardingTable[forwardingTable.size()-1];
 }
 
 void Router::sendToPort(int portNum , QSharedPointer<Packet> pack)

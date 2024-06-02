@@ -13,23 +13,22 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     Controller * controller = new Controller("192.168" , "192.170" , 4);
+    // controller->ConnectClockToNodes();
+
+
+    // controller->main();
+
+    // Packet pack1("192.168.1.2" , "192.168.1.3" , "hello from 2 to 3" , Data);
+    // RingStarCluster * rsCluster= new RingStarCluster(RingStar , "192.168");
+    // rsCluster->createRingStarCluster();
+    // rsCluster->getRouters()[7]->getPort(0)->sendPacket(QSharedPointer<Packet>::create(pack1));
+
+    Packet pack1("192.168.100000.2" , "192.168.20000.3" , "hello from 2 to 3" , Data);
+    // MeshCluster * mCluster= new MeshCluster(Mesh , "192.168" , 4);
+    MeshCluster * mCluster = controller->getMeshCluster();
+    mCluster->createMeshCluster();
+    mCluster->getRouters()[2][2]->getPort(0)->sendPacket(QSharedPointer<Packet>::create(pack1));
     delete controller;
-    // for(int i = 0 ; i < 10; i ++)
-    // {
-    //     Packet pack1("192.168.1.2" , "192.168.1.3" , "hello from 2 to 3" , Data);
-    //     RingStarCluster * rsCluster= new RingStarCluster(RingStar , "192.168");
-    //     rsCluster->createRingStarCluster();
-    //     rsCluster->getRouters()[7]->getPort(0)->sendPacket(QSharedPointer<Packet>::create(pack1));
-    // }
-
-    // for(int i = 0 ; i < 10; i ++)
-    // {
-    //     Packet pack1("192.168.100000.2" , "192.168.20000.3" , "hello from 2 to 3" , Data);
-    //     MeshCluster * mCluster= new MeshCluster(Mesh , "192.168" , 4);
-    //     mCluster->createMeshCluster();
-    //     mCluster->getRouters()[2][2]->getPort(0)->sendPacket(QSharedPointer<Packet>::create(pack1));
-    // }
-
     QCoreApplication::quit();
 
     // QThread thread1 , thread2;
