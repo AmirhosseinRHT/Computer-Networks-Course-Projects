@@ -110,8 +110,8 @@ void Router::roundRobinPacketHandler()
 
 void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
 {
-    if(p->getType() == DHCP)
-    {
+    switch(p->getType())
+    case DHCP:{
         if(p->getData() == "IP_REQUEST")
         {
             IP achievedIp = requestIP(portNum);
@@ -127,5 +127,15 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
             giveBackIP(p->getSourceAddr());
             forwardingTable[portNum]->nextHopIP = "0";
         }
+    }break;
+    case DistanceVec:{
+
+    }break;
+    case Greeting:{
+
+    }break;
+    default:{
+
     }
+
 }
