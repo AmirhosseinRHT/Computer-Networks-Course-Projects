@@ -14,6 +14,15 @@ Router::~Router()
     }
 }
 
+route::route(){}
+
+route::route(IP& ip, int& _cost, IP nh){
+    destination = ip;
+    cost = _cost;
+    nextHop = nh;
+
+}
+
 IP Router::convertIPv6ToIPv4(IP ipv6Address) {
     QHostAddress ipv6Addr(ipv6Address);
     if (ipv6Addr.protocol() != QAbstractSocket::IPv6Protocol)
@@ -142,5 +151,15 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
 
 void Router::updateDistanceVec(QSharedPointer<Packet> p , int portNum){
     QString new_data =  p->getPacket();
+    QVector distance_info = spliteString(new_data ,',');
+    for(int i=0; i < distance_info.size(); i++){
+        QVector<QString> ip_distance = spliteString(distance_info[i] ,':');
+        IP curr_ip = ip_distance[0];
+        int new_distance = ip_distance[1].toInt();
 
+        auto curr_route = routingTable.find(curr_ip);
+        if(curr_route == routingTable.end() || curr_route->cost > new_distance){
+            routingTable[curr_ip] = route(curr_ip , new_distance , p->getDestiantionAddr());
+        }
+    }
 }

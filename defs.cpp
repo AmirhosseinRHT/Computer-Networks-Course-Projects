@@ -1,6 +1,6 @@
 #include "defs.hpp"
 
-QVector<QString> spliteString(QString &str, char del)
+QVector<QString> spliteString(const QString &str, char del)
 {
     QVector<QString> resulte_vector;
     QString temp = "";

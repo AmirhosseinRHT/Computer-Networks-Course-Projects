@@ -5,6 +5,7 @@ CONFIG += c++17 cmdline
 SOURCES += \
         cluster.cpp \
         controller.cpp \
+        defs.cpp \
         host.cpp \
         main.cpp \
         meshcluster.cpp \

@@ -22,7 +22,7 @@ public:
     void roundRobinPacketHandler();
     void handleDequeuedPacket(QSharedPointer<Packet> p , int portNum);
 private:
-    QVector<route> routingTable;
+    QMap<IP ,  route> routingTable;
     QVector<forward *> forwardingTable;
     QVector<QPair<int,IP>> assignedIPs;
     void updateDistanceVec(QSharedPointer<Packet> p , int portNum);
