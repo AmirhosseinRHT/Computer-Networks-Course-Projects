@@ -182,7 +182,9 @@ QString Router::dataOfRoutingTable(){
 
 void Router::sendRouteTebleInfo(){
     QString routingTableData = dataOfRoutingTable();
-
-    Packet packet = Packet(ip ,);
-    QSharedPointer<Packet> distanceVecMessage = QSharedPointer<Packet>::create(packet);
+    for(auto neighbour : forwardingTable){
+        Packet packet = Packet(ip ,neighbour->nextHopIP ,routingTableData ,DistanceVec);
+        QSharedPointer<Packet> distanceVecMessage = QSharedPointer<Packet>::create(packet);
+        neighbour->port->sendPacket(distanceVecMessage);
+    }
 }
