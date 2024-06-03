@@ -138,7 +138,7 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
         }
         break;
     case DistanceVec:
-
+        updateDistanceVec(p ,portNum);
         break;
     case Greeting:
 
