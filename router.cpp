@@ -152,6 +152,7 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
 void Router::updateDistanceVec(QSharedPointer<Packet> p , int portNum){
     QString new_data =  p->getPacket();
     QVector distance_info = spliteString(new_data ,',');
+    bool tableChanged = false;
     for(int i=0; i < distance_info.size(); i++){
         QVector<QString> ip_distance = spliteString(distance_info[i] ,':');
         IP curr_ip = ip_distance[0];
@@ -159,7 +160,29 @@ void Router::updateDistanceVec(QSharedPointer<Packet> p , int portNum){
 
         auto curr_route = routingTable.find(curr_ip);
         if(curr_route == routingTable.end() || curr_route->cost > new_distance){
+            tableChanged = true;
             routingTable[curr_ip] = route(curr_ip , new_distance , p->getDestiantionAddr());
         }
     }
+    if(tableChanged)
+        sendRouteTebleInfo();
+}
+
+
+QString Router::dataOfRoutingTable(){
+    QString data = "";
+    for(auto i = routingTable.begin();i != routingTable.end(); i++){
+        data += i->destination;
+        data += ":";
+        data += QString::number(i->cost);
+        data += ",";
+    }
+    return data;
+}
+
+void Router::sendRouteTebleInfo(){
+    QString routingTableData = dataOfRoutingTable();
+
+    Packet packet = Packet(ip ,);
+    QSharedPointer<Packet> distanceVecMessage = QSharedPointer<Packet>::create(packet);
 }
