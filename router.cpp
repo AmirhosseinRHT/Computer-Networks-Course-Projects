@@ -40,8 +40,9 @@ IP Router::convertIPv4ToIPv6(IP ipv4Address)
     return ipv6Addr.toString();
 }
 
-void Router::onClock()
+void Router::onClock(NetworkState ns)
 {
+    currentState = ns;
     // qDebug() << "router " + ip + " got clock";
     roundRobinPacketHandler();
 }
@@ -126,7 +127,7 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
             IP achievedIp = requestIP(portNum);
             if(!achievedIp.isNull())
             {
-                Packet pack(ip , achievedIp , achievedIp , DHCP);
+                Packet pack(ip , achievedIp , "DHCP_ANSWER" , DHCP);
                 forwardingTable[portNum]->nextHopIP = achievedIp;
                 forwardingTable[portNum]->port->sendPacket(QSharedPointer<Packet>::create(pack));
             }

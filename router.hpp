@@ -29,7 +29,7 @@ private:
     void sendRouteTebleInfo();
     QString dataOfRoutingTable();
 public slots:
-    void onClock() override;
+    void onClock(NetworkState ns) override;
 };
 
 #endif // ROUTER_HPP

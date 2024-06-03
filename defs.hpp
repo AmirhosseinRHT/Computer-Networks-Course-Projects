@@ -11,6 +11,8 @@ enum PacketType { Data = 1 , Greeting = 2 , DistanceVec= 3 , DHCP = 4};
 
 enum IPversion {IPV4 = 1 , IPV6 = 2 };
 
+enum NetworkState {InteractionWithDHCP , NeighborIdentification , SendData};
+
 QVector<QString> spliteString(const QString &str, char del);
 
 #endif // DEFS_HPP

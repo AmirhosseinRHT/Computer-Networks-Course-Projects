@@ -17,11 +17,12 @@ public:
     int getPortQueueSize(){return portQueueSize;};
     QVector<QString> splitPacket(QString str, char del);
 protected:
+    NetworkState currentState;
     IP ip;
     int portQueueSize;
 
 public slots:
-    virtual void onClock(){};
+    virtual void onClock(NetworkState ns){currentState = ns;};
 };
 
 #endif // NODE_HPP
