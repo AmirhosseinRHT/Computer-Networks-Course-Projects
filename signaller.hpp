@@ -10,7 +10,6 @@ class Signaller : public QObject
 public:
     explicit Signaller(int _clocklength , QObject *parent = nullptr);
     void main();
-
 private:
     NetworkState currentState;
     int clockLength;

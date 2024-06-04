@@ -20,17 +20,21 @@ public:
     void setData(QString d){ data = d;}
     void setTime(QString time){generateTime = time;}
     void setPacketType(PacketType t){ type = t;}
-    void printLog();
-
-    void icreaseInQueueCycle(int val = 1){ inQueueCycle += val;}
+    void icreaseInQueueCycle(int val = 1);
+    bool isMaskedAPacket(){return maskedPacket;}
+    QSharedPointer<Packet> getInnerPacket(){return innerPacket;}
+    void addLog(QString log);
+    void printLogs();
 private:
     IP sourceAddr;
     IP destinationAddr;
     QString data;
     PacketType type;
     QString generateTime;
-    QVector<QString> log;
+    QVector<QPair<int ,QString>> logs;
     int inQueueCycle;
+    bool maskedPacket;
+    QSharedPointer<Packet> innerPacket;
 };
 
 #endif // PACKET_HPP

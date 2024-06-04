@@ -16,6 +16,7 @@ public:
     Port * getPort() {return port;}
     void getIpFromDHCPServer();
     void handleIncomingPackets();
+    QSharedPointer<Packet> createPacket(IP destination , QString data);
 private:
     IP neighborRouter;
     Port * port;

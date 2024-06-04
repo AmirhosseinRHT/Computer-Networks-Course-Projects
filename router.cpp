@@ -142,7 +142,8 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
         updateDistanceVec(p ,portNum);
         break;
     case Greeting:
-
+        break;
+    case Data:
         break;
     default:
         break;
@@ -188,4 +189,10 @@ void Router::sendRouteTebleInfo(){
         QSharedPointer<Packet> distanceVecMessage = QSharedPointer<Packet>::create(packet);
         neighbour->port->sendPacket(distanceVecMessage);
     }
+}
+
+void Router::updatePacketLogs(QSharedPointer<Packet> p , QString log)
+{
+    p->icreaseInQueueCycle();
+    p->addLog(log);
 }

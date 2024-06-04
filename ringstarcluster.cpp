@@ -35,7 +35,7 @@ void RingStarCluster::createRoutersAndHosts()
     for(int i = 0 ; i < 8 ; i++)
         routers.append(new Router(getBaseIP() + "." + QString::number(i+1) + ".1" , IPV4 , 10));
     for(int i = 0 ; i < 5 ; i++)
-        hosts.append(new Host(QString::number(i) , IPV4 , 10));
+        hosts.append(new Host("nothing" , IPV4 , 10));
 }
 
 void RingStarCluster::connectRingStarPorts()

@@ -13,7 +13,6 @@ class Controller : public QObject
 public:
    explicit Controller(IP _ringStarBaseIP , IP _meshBaseIP ,IP _torusBaseIP , int _MeshSize , int TorusSize , QObject * parent = nullptr);
    ~Controller();
-   void main();
    MeshCluster * getMeshCluster(){return mCluster;}
    RingStarCluster * getRingStarCluster(){return rsCluster;}
    TorusCluster * getTorusCluster(){return tCluster;}

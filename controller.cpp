@@ -22,7 +22,6 @@ Controller::~Controller()
     delete mCluster;
 }
 
-
 void Controller::ConnectClockToNodes(Signaller * signaller)
 {
     QVector <Host*>hosts = mCluster->getHosts();
@@ -55,13 +54,3 @@ void Controller::ConnectClockToNodes(Signaller * signaller)
     // rsCluster->moveNodesToThread();
 }
 
-
-void Controller::main()
-{
-    while(true)
-    {
-        qDebug() << "emitter emitted";
-        emit Clock();
-        QThread::msleep(5000);
-    }
-}
