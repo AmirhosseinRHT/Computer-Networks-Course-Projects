@@ -1,8 +1,9 @@
 #include "router.hpp"
 #include <QHostAddress>
 
-Router::Router(IP _ip,IPversion v ,int _portQueueSize) :Node(_ip ,v , _portQueueSize) {
+Router::Router(IP _ip,IPversion v ,int _portQueueSize , bool isEdge) :Node(_ip ,v , _portQueueSize) {
     assignedIPs.append(QPair<int,QString> (-1 , ip));
+    isEdgeRouter = isEdge;
 }
 
 Router::~Router()

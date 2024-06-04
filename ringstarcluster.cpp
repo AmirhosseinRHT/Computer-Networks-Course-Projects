@@ -41,19 +41,13 @@ void RingStarCluster::createRoutersAndHosts()
 void RingStarCluster::connectRingStarPorts()
 {
     for(int i = 0 ; i < 7 ; i++)
-    {
         connectRouters(routers[i] , routers[(i+6)%7]);
-    }
     //add center router
     for (int i = 0; i < 4; i++)
-    {
         connectRouters(routers[7] , routers[i*2]);
-    }
 
     for (int i = 0; i < 3; i++)
-    {
         connectRouterToHost(routers[4] , hosts[i]);
-    }
 
     connectRouterToHost(routers[4] , hosts[3]);
     connectRouterToHost(routers[4] , hosts[4]);
@@ -63,8 +57,6 @@ void RingStarCluster::createRingStarCluster()
 {
     Cluster::createThreads(13);
     createRoutersAndHosts();
-
     connectRingStarPorts();
-
     moveNodesToThread();
 }
