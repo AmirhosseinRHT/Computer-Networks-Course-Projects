@@ -5,7 +5,7 @@
 
 typedef QString IP;
 
-enum ClusterType { RingStar = 1, Mesh = 2};
+enum ClusterType { RingStar = 1, Mesh = 2 , Torus};
 
 enum PacketType { Data = 1 , Greeting = 2 , DistanceVec= 3 , DHCP = 4};
 

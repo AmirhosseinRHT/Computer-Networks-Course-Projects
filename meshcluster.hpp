@@ -18,7 +18,7 @@ public:
     void connectAllRouters();
     void connectHostsToRouters();
     QVector<QVector<Router * >> getRouters(){return routers;}
-private:
+protected:
     QVector<QVector<Router * >> routers;
     int n;
 signals:

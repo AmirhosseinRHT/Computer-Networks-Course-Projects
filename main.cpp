@@ -5,42 +5,10 @@
 #include <QString>
 #include <QTextStream>
 
-void moveRingStarNodesToThread(QVector <QThread * > RsThreads ,  RingStarCluster * rs)
-{
-    QVector <Router *> routers =rs->getRouters();
-    QVector <Host *> hosts =rs->getHosts();
-    for(int i = 0 ; i < 13 ; i ++)
-        RsThreads.append(new QThread());
-    for(int i = 0 ; i < 5 ; i++)
-        hosts[i]->moveToThread(RsThreads[i+8]);
-    for (int i = 0; i < 8; i++)
-        routers[i]->moveToThread(RsThreads[i]);
-    for(int i = 0 ; i < RsThreads.size() ; i ++ )
-        RsThreads[i]->start();
-}
-
-void moveMeshNodesToThread(QVector <QThread * > mThreads ,  MeshCluster * m ,int n)
-{
-    QVector <QVector<Router *>> routers =m->getRouters();
-    QVector <Host *> hosts =m->getHosts();
-    for(int i = 0 ; i < n * (n + 2); i++)
-        mThreads.append(new QThread);
-    for (int i=0; i< n; i++)
-        for (int j = 0 ; j < n; j++)
-            routers[i][j]->moveToThread(mThreads[i*4 + j]);
-    for(int i=0 ; i < 2 * n ; i++)
-        hosts[i]->moveToThread(mThreads[n*n + i]);
-    for(int i = 0 ; i < mThreads.size() ; i ++ )
-    {
-        mThreads[i]->start();
-    }
-}
-
-
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    Controller * controller = new Controller("192.168" , "192.170" , 4);
+    Controller * controller = new Controller("192.168" , "192.170"  , "200.200", 4 , 3);
     Signaller * signaller = new Signaller(5000);
     controller->ConnectClockToNodes(signaller);
     QThread th1;
