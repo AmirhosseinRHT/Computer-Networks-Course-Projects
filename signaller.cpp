@@ -12,13 +12,13 @@ void Signaller::main()
 {
 
     emit Clock(InteractionWithDHCP);
-    qDebug() << "111111111111111111111111111111111111111111111111111111";
+    // qDebug() << "111111111111111111111111111111111111111111111111111111";
     QThread::msleep(clockLength);
-    // emit Clock(NeighborIdentification);
-    // QThread::msleep(clockLength);
-    emit Clock(InteractionWithDHCP);
-    qDebug() << "222222222222222222222222222222222222222222222222222222";
-    QThread::msleep(clockLength);
+    for(int i =0 ; i < 20 ; i ++)
+    {
+        emit Clock(NeighborIdentification);
+        QThread::msleep(100);
+    }
     while(true)
     {
         qDebug() << "emitter emitted";

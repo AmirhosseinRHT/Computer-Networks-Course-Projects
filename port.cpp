@@ -18,7 +18,7 @@ void Port::updateMaxQueueSize(int newSize)
 
 void Port::recievePacket(QSharedPointer<Packet> pack)
 {
-    qDebug() << "Recieved Packet : "<<  pack->getPacket() << "\n";
+    // qDebug() << "Recieved Packet : "<<  pack->getPacket() << "\n";
     if(maxQueueSize == queue.size())
         qDebug() << "packet Dropped due to queue owerflowing!\n" ;
     else

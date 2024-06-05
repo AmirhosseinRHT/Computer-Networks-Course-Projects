@@ -15,9 +15,9 @@ public:
     ~Cluster();
     void createMeshCluster();
     QVector <Router *> getEdgeRouters();
-    void connectPorts(Port * p1 , Port * p2);
-    void connectRouters(Router * r1 , Router * r2);
-    void connectRouterToHost(Router * r , Host * h);
+    static void connectPorts(Port * p1 , Port * p2);
+    static void connectRouters(Router * r1 , Router * r2);
+    static void connectRouterToHost(Router * r , Host * h);
     QVector<Host *> getHosts() {return hosts;}
     void createThreads(int n);
     IP getBaseIP(){return baseIP;}

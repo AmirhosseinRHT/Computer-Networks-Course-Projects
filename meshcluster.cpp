@@ -7,7 +7,17 @@ MeshCluster::MeshCluster(ClusterType _type , IP _baseIP , int _n): Cluster{_type
 
 QVector<Router*> MeshCluster::getEdgeRouters()
 {
-    QVector <Router *> edgeRouters ;
+    QVector <Router *> edgeRouters;
+    for (int i = 0; i < routers.size(); i++)
+    {
+        edgeRouters.append(routers[n-1][i]);
+        routers[n-1][i]->isEdgeRouter = true;
+    }
+    for (int i = 0; i < routers.size(); i++)
+    {
+        routers[i][n-1]->isEdgeRouter = true;
+        edgeRouters.append(routers[i][n-1]);
+    }
     return edgeRouters;
 }
 
@@ -23,7 +33,7 @@ void MeshCluster::createMeshRoutersAndHosts() {
     for (int i = 0; i < n ; i++){
         QVector<Router*> temp;
         for (int j = 0; j < n ; j++){
-            temp.append(new Router(getBaseIP() + "." + QString::number(j + i * n + 1) + ".1" , IPV4 , 10));
+            temp.append(new Router(getBaseIP() + "." + QString::number(j + i * n + 1) + ".1" , IPV4 , 100));
         }
         routers.append(temp);
     }

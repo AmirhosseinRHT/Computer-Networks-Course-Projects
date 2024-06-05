@@ -19,6 +19,7 @@ public:
    TorusCluster * getTorusCluster(){return tCluster;}
    void ConnectSignalsToNodes(Signaller * signaller , CommandReader * cr);
    void createNetwork();
+   void connectEdgeRouters();
 private:
     MeshCluster * mCluster;
     RingStarCluster * rsCluster;

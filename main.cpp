@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     Network * net = new Network("192.168" , "192.170"  , "200.200", 4 , 3);
-    Signaller * signaller = new Signaller(15000);
+    Signaller * signaller = new Signaller(2000);
     CommandReader * cr = new CommandReader();
     QThread th1 , th2 , th3;
     signaller->moveToThread(&th1);

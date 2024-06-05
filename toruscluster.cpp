@@ -12,11 +12,22 @@ TorusCluster::~TorusCluster()
             delete routers[i][j];
 }
 
+QVector<Router *> TorusCluster::getEdgeRouters()
+{
+    QVector<Router * > edges;
+    for(int j = 0 ; j < n; j++)
+    {
+        routers[j][0]->isEdgeRouter = true;
+        edges.append(routers[j][0]);
+    }
+    return edges;
+}
+
 void TorusCluster::createTorusRoutersAndHosts() {
     for (int i = 0; i < n ; i++){
         QVector<Router*> temp;
         for (int j = 0; j < n ; j++){
-            temp.append(new Router(getBaseIP() + "." + QString::number(j + i * n + 1) + ".1" , IPV4 , 10));
+            temp.append(new Router(getBaseIP() + "." + QString::number(j + i * n + 1) + ".1" , IPV4 , 100));
         }
         routers.append(temp);
     }
@@ -44,7 +55,7 @@ void TorusCluster::connectAllRouters() {
 void TorusCluster::connectHostsToRouters()
 {
     for(int j = 0 ; j < n; j++)
-        connectRouterToHost(routers[0][j] , hosts[j]);
+        connectRouterToHost(routers[j][n-1] , hosts[j]);
 
 }
 
