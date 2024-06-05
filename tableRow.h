@@ -9,7 +9,7 @@ typedef struct route{
     int cost;
     IP nextHop;
     route();
-    route(IP& ip,int& _cost , IP nh);
+    route(const IP ip,const int _cost , const IP nh);
 } route;
 
 typedef struct{

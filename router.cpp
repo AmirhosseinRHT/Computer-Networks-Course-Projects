@@ -18,7 +18,7 @@ Router::~Router()
 
 route::route(){}
 
-route::route(IP& ip, int& _cost, IP nh){
+route::route(const IP ip,const  int _cost,const IP nh){
     destination = ip;
     cost = _cost;
     nextHop = nh;
