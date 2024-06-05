@@ -17,6 +17,7 @@ typedef struct{
     IP subnetMask;
     IP subnetID;
     Port * port;
+    NodeType nextHobType;
 } forward;
 
 #endif // TABLEROW_H

@@ -3,6 +3,7 @@
 
 Router::Router(IP _ip,IPversion v ,int _portQueueSize) :Node(_ip ,v , _portQueueSize) {
     assignedIPs.append(QPair<int,QString> (-1 , ip));
+    routingTable[ip] = route(ip , 0 , ip);
 }
 
 Router::~Router()
@@ -150,6 +151,8 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
 }
 
 void Router::updateDistanceVec(QSharedPointer<Packet> p , int portNum){
+    qDebug() << "router " << ip << " receive distanceVec Packet from " << p->getSourceAddr()
+             << "\n";
     QString new_data =  p->getPacket();
     QVector distance_info = spliteString(new_data ,',');
     bool tableChanged = false;
@@ -159,9 +162,9 @@ void Router::updateDistanceVec(QSharedPointer<Packet> p , int portNum){
         int new_distance = ip_distance[1].toInt();
 
         auto curr_route = routingTable.find(curr_ip);
-        if(curr_route == routingTable.end() || curr_route->cost > new_distance){
-            tableChanged = true;
-            routingTable[curr_ip] = route(curr_ip , new_distance , p->getDestiantionAddr());
+        if(curr_route == routingTable.end() || curr_route->cost > (new_distance +1)){
+            tableChanged = true;       
+            routingTable[curr_ip] = route(curr_ip , new_distance , p->getSourceAddr());
         }
     }
     if(tableChanged)
