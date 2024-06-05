@@ -11,17 +11,17 @@ class Node : public QObject
     Q_OBJECT
 public:
     explicit Node(IP _ip,IPversion v ,int _portQueueSize,QObject *parent = nullptr);
-    void createPacket();
     QVector<int> splitIp(QString ip);
     IPversion ver;
     int getPortQueueSize(){return portQueueSize;};
     QVector<QString> splitPacket(QString str, char del);
 protected:
+    NetworkState currentState;
     IP ip;
     int portQueueSize;
 
 public slots:
-    virtual void onClock(){};
+    virtual void onClock(NetworkState ns){currentState = ns;};
 };
 
 #endif // NODE_HPP

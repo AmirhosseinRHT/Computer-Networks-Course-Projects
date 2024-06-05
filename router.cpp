@@ -1,9 +1,10 @@
 #include "router.hpp"
 #include <QHostAddress>
 
-Router::Router(IP _ip,IPversion v ,int _portQueueSize) :Node(_ip ,v , _portQueueSize) {
+Router::Router(IP _ip,IPversion v ,int _portQueueSize , bool isEdge) :Node(_ip ,v , _portQueueSize) {
     assignedIPs.append(QPair<int,QString> (-1 , ip));
     routingTable[ip] = route(ip , 0 , ip);
+    isEdgeRouter = isEdge;
 }
 
 Router::~Router()
@@ -41,8 +42,9 @@ IP Router::convertIPv4ToIPv6(IP ipv4Address)
     return ipv6Addr.toString();
 }
 
-void Router::onClock()
+void Router::onClock(NetworkState ns)
 {
+    currentState = ns;
     // qDebug() << "router " + ip + " got clock";
     roundRobinPacketHandler();
 }
@@ -127,7 +129,7 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
             IP achievedIp = requestIP(portNum);
             if(!achievedIp.isNull())
             {
-                Packet pack(ip , achievedIp , achievedIp , DHCP);
+                Packet pack(ip , achievedIp , "DHCP_ANSWER" , DHCP);
                 forwardingTable[portNum]->nextHopIP = achievedIp;
                 forwardingTable[portNum]->port->sendPacket(QSharedPointer<Packet>::create(pack));
             }
@@ -142,7 +144,8 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
         updateDistanceVec(p ,portNum);
         break;
     case Greeting:
-
+        break;
+    case Data:
         break;
     default:
         break;
@@ -190,4 +193,10 @@ void Router::sendRouteTebleInfo(){
         QSharedPointer<Packet> distanceVecMessage = QSharedPointer<Packet>::create(packet);
         neighbour->port->sendPacket(distanceVecMessage);
     }
+}
+
+void Router::updatePacketLogs(QSharedPointer<Packet> p , QString log)
+{
+    p->icreaseInQueueCycle();
+    p->addLog(log);
 }

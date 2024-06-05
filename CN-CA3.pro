@@ -14,7 +14,8 @@ SOURCES += \
         port.cpp \
         ringstarcluster.cpp \
         router.cpp \
-        signaller.cpp
+        signaller.cpp \
+        toruscluster.cpp
 
 HEADERS += \
         cluster.hpp \
@@ -29,7 +30,8 @@ HEADERS += \
         port.hpp \
         router.hpp \
         signaller.hpp \
-        tableRow.h
+        tableRow.h \
+        toruscluster.hpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -42,10 +42,3 @@ QVector<int> Node::splitIp(QString ip)
     return result;
 }
 
-
-void Node::createPacket()
-{
-    Packet pack("so" , "dest" , "hello world" , Data);
-    QSharedPointer<Packet> temp = QSharedPointer<Packet>::create(pack);
-
-}

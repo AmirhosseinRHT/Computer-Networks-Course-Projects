@@ -15,10 +15,13 @@ public:
     ~Host();
     Port * getPort() {return port;}
     void getIpFromDHCPServer();
+    void handleIncomingPackets();
+    QSharedPointer<Packet> createPacket(IP destination , QString data);
 private:
+    IP neighborRouter;
     Port * port;
 public slots:
-    void onClock() override;
+    void onClock(NetworkState ns) override;
 };
 
 #endif // HOST_HPP

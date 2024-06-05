@@ -2,6 +2,7 @@
 #define SIGNALLER_HPP
 
 #include <QObject>
+#include "defs.hpp"
 
 class Signaller : public QObject
 {
@@ -9,11 +10,11 @@ class Signaller : public QObject
 public:
     explicit Signaller(int _clocklength , QObject *parent = nullptr);
     void main();
-
 private:
+    NetworkState currentState;
     int clockLength;
 signals:
-    void Clock();
+    void Clock(NetworkState ns);
 };
 
 #endif // SIGNALLER_HPP

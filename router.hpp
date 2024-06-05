@@ -9,7 +9,7 @@
 class Router : public Node
 {
 public:
-    explicit Router(IP _ip ,IPversion v , int _portQueueSize);
+    explicit Router(IP _ip ,IPversion v , int _portQueueSize , bool isEdge=false);
     ~Router();
     forward* createForwardingRow(IP hopID ,IP subnetMask ,IP subnetID, int queueSize);
     void sendToPort(int portNum , QSharedPointer<Packet> pack);
@@ -21,6 +21,8 @@ public:
     IP convertIPv6ToIPv4(IP ipv6Address);
     void roundRobinPacketHandler();
     void handleDequeuedPacket(QSharedPointer<Packet> p , int portNum);
+    void updatePacketLogs(QSharedPointer<Packet> p , QString log);
+    bool isEdgeRouter;
 private:
     QMap<IP ,  route> routingTable;
     QVector<forward *> forwardingTable;
@@ -28,8 +30,9 @@ private:
     void updateDistanceVec(QSharedPointer<Packet> p , int portNum);
     void sendRouteTebleInfo();
     QString dataOfRoutingTable();
+
 public slots:
-    void onClock() override;
+    void onClock(NetworkState ns) override;
 };
 
 #endif // ROUTER_HPP
