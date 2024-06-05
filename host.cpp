@@ -33,6 +33,15 @@ void Host::getIpFromDHCPServer()
 }
 
 
+void Host::sendPacketTo(QString src , QString dest)
+{
+    if(src == ip)
+    {
+        Packet pack(ip , dest , "!!!!!Hello!!!!!" , Data);
+        port->sendPacket(QSharedPointer<Packet>::create(pack));
+    }
+}
+
 void Host::handleIncomingPackets()
 {
     while(!port->isQueueEmpty())
@@ -47,6 +56,7 @@ void Host::handleIncomingPackets()
         {
             qDebug() << "Host " + p->getDestiantionAddr() + " Recieved Packet from " + p->getSourceAddr()
                             + " data : " + p->getData();
+            p->printLogs();
         }
     }
 }

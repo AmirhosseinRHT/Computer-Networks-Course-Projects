@@ -24,13 +24,17 @@ public:
     void updatePacketLogs(QSharedPointer<Packet> p , QString log);
     bool isEdgeRouter;
     void printRoutingTable();
+    void sendGreetingPacket();
+    void handleGreetingPacket(QSharedPointer<Packet> p , int portNum);
+    void handleDhcpRequest(QSharedPointer<Packet> p, int portNum);
+    void forwardPacket(QSharedPointer<Packet> p, int portNum);
 private:
     QMap<IP ,  route> routingTable;
     QVector<forward *> forwardingTable;
     QVector<QPair<int,IP>> assignedIPs;
     void updateDistanceVec(QSharedPointer<Packet> p , int portNum);
     void sendRouteTebleInfo();
-    QString dataOfRoutingTable();
+    QString dataOfRoutingTable(NodeType nextHopType);
     bool routingTableChanged;
 
 public slots:

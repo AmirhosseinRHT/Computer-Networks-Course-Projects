@@ -11,6 +11,7 @@ public:
     void readCommands();
 signals:
     void printRoutingTable(QString Command);
+    void requestSendPacket(QString src , QString dest);
 };
 
 #endif // COMMANDREADER_H

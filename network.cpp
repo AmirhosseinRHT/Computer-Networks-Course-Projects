@@ -33,15 +33,24 @@ void Network::ConnectSignalsToNodes(Signaller * signaller , CommandReader * cr)
 {
     QVector <Host*>hosts = mCluster->getHosts();
     for(int i = 0 ; i < hosts.size() ; i ++ )
-    QObject::connect(signaller, &Signaller::Clock, hosts[i], &Host::onClock);
+    {
+        QObject::connect(cr, &CommandReader::requestSendPacket, hosts[i], &Host::sendPacketTo);
+        QObject::connect(signaller, &Signaller::Clock, hosts[i], &Host::onClock);
+    }
 
     hosts = rsCluster->getHosts();
     for(int i = 0 ; i < hosts.size() ; i ++ )
+    {
+        QObject::connect(cr, &CommandReader::requestSendPacket, hosts[i], &Host::sendPacketTo);
         QObject::connect(signaller, &Signaller::Clock, hosts[i], &Host::onClock);
+    }
 
     hosts = tCluster->getHosts();
     for(int i = 0 ; i < hosts.size() ; i ++ )
+    {
+        QObject::connect(cr, &CommandReader::requestSendPacket, hosts[i], &Host::sendPacketTo);
         QObject::connect(signaller, &Signaller::Clock, hosts[i], &Host::onClock);
+    }
 
     QVector <Router *> rsrouters = rsCluster->getRouters();
     for(int i = 0 ; i < rsrouters.size() ; i ++ )

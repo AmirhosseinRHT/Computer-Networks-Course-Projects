@@ -11,7 +11,7 @@ void CommandReader::readCommands()
     while (true)
     {
         std::string command;
-        std::cout << "command: ";
+        std::cout << "COMMAND: ";
         std::getline(std::cin, command);
         istringstream istrstream(command);
         string str;
@@ -20,6 +20,8 @@ void CommandReader::readCommands()
             commandSplits.push_back(str);
         if(commandSplits[0].compare("p") == 0)
             emit printRoutingTable(QString::fromStdString(commandSplits[1]));
+        else if(commandSplits[0].compare("s") == 0)
+            emit requestSendPacket(QString::fromStdString(commandSplits[1]) , QString::fromStdString(commandSplits[2]));
         QThread::msleep(100);
     }
 }

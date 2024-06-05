@@ -32,7 +32,7 @@ void TorusCluster::createTorusRoutersAndHosts() {
         routers.append(temp);
     }
     for(int i = 0; i < n ; i++)
-        hosts.append(new Host("nothing" , IPV4 , 10));
+        hosts.append(new Host("NOTHING" , IPV4 , 10));
 }
 
 void TorusCluster::connectAllRouters() {

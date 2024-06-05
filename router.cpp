@@ -3,7 +3,7 @@
 
 Router::Router(IP _ip,IPversion v ,int _portQueueSize , bool isEdge) :Node(_ip ,v , _portQueueSize) {
     assignedIPs.append(QPair<int,QString> (-1 , ip));
-    routingTable[ip] = route(ip , 0 , ip);
+    // routingTable[getBaseIP(_ip)] = route(getBaseIP(_ip) , 0 , getBaseIP(_ip));
     isEdgeRouter = isEdge;
 }
 
@@ -45,11 +45,23 @@ IP Router::convertIPv4ToIPv6(IP ipv4Address)
 void Router::onClock(NetworkState ns)
 {
     currentState = ns;
-    if(ns == NeighborIdentification){
+    if(ns == RouterGreeting)
+    {
+        sendGreetingPacket();
+    }
+    else if(ns == NeighborIdentification){
         sendRouteTebleInfo();
     }
-    // qDebug() << "router " + ip + " got clock";
     roundRobinPacketHandler();
+}
+
+void Router::sendGreetingPacket()
+{
+    for(auto neighbour : forwardingTable){
+        Packet packet = Packet(ip ,neighbour->nextHopIP ,"GREETING" ,Greeting);
+        QSharedPointer<Packet> greetingPacket = QSharedPointer<Packet>::create(packet);
+        neighbour->port->sendPacket(greetingPacket);
+    }
 }
 
 forward* Router::createForwardingRow(IP hopID ,IP subnetMask ,IP subnetID , int queueSize)
@@ -123,42 +135,94 @@ void Router::roundRobinPacketHandler()
     }
 }
 
+void Router::handleDhcpRequest(QSharedPointer<Packet> p, int portNum)
+{
+    if(p->getData() == "IP_REQUEST")
+    {
+        IP achievedIp = requestIP(portNum);
+        if(!achievedIp.isNull())
+        {
+            Packet pack(ip , achievedIp , "DHCP_ANSWER" , DHCP);
+            routingTable[achievedIp] = route(achievedIp , 1 , achievedIp);
+            forwardingTable[portNum]->nextHopIP = achievedIp;
+            forwardingTable[portNum]->nextHobType = HOST;
+            forwardingTable[portNum]->port->sendPacket(QSharedPointer<Packet>::create(pack));
+        }
+    }
+    else if(p->getData() == "IP_GIVEBACK")
+    {
+        giveBackIP(p->getSourceAddr());
+        // routingTable.erase(p->getSourceAddr());
+        forwardingTable[portNum]->nextHopIP = "0";
+    }
+}
+
 void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
 {
     switch(p->getType()){
     case DHCP:
-        if(p->getData() == "IP_REQUEST")
-        {
-            IP achievedIp = requestIP(portNum);
-            if(!achievedIp.isNull())
-            {
-                Packet pack(ip , achievedIp , "DHCP_ANSWER" , DHCP);
-                forwardingTable[portNum]->nextHopIP = achievedIp;
-                forwardingTable[portNum]->port->sendPacket(QSharedPointer<Packet>::create(pack));
-            }
-        }
-        else if(p->getData() == "IP_GIVEBACK")
-        {
-            giveBackIP(p->getSourceAddr());
-            forwardingTable[portNum]->nextHopIP = "0";
-        }
+        handleDhcpRequest(p, portNum);
         break;
     case DistanceVec:
         updateDistanceVec(p ,portNum);
         break;
-    case Greeting:
-        break;
     case Data:
+        forwardPacket(p ,portNum);
+        break;
+    case Greeting:
+        handleGreetingPacket(p , portNum);
         break;
     default:
         break;
     }
+}
 
+void Router::forwardPacket(QSharedPointer<Packet> p, int portNum)
+{
+    if(getBaseIP(p->getDestiantionAddr()) == getBaseIP(ip))
+    {
+        for(auto i = routingTable.begin();i != routingTable.end(); i++){
+            if(i->destination == p->getDestiantionAddr()){
+                for(int j =0 ; j < forwardingTable.size();j++)
+                    if(forwardingTable[j]->nextHopIP == i->nextHop){
+                        p->addLog("forwarded by router:" + ip +" to hop:" + i->nextHop);
+                        p->icreaseInQueueCycle();
+                        forwardingTable[j]->port->sendPacket(p);
+                        return;
+                    }
+            }
+
+        }
+    }
+    else
+    {
+        for(auto i = routingTable.begin();i != routingTable.end(); i++){
+            if(i->destination == getBaseIP(p->getDestiantionAddr())){
+                for(int j =0 ; j < forwardingTable.size();j++)
+                    if(forwardingTable[j]->nextHopIP == i->nextHop){
+                        p->addLog("forwarded by router:" + ip +" to hop:" + i->nextHop);
+                        p->icreaseInQueueCycle();
+                        forwardingTable[j]->port->sendPacket(p);
+                        return;
+                    }
+            }
+
+        }
+    }
+}
+
+void Router::handleGreetingPacket(QSharedPointer<Packet> p , int portNum)
+{
+    if(forwardingTable[portNum]->nextHopIP == "NOTHING" || forwardingTable[portNum]->nextHopIP == "0")
+    forwardingTable[portNum]->nextHopIP = p->getSourceAddr();
+    if(getBaseIP(p->getSourceAddr()) == getBaseIP(ip))
+        forwardingTable[portNum]->nextHobType = LOCAL_ROUTER;
+    else
+        forwardingTable[portNum]->nextHobType = EXTERNAL_ROUTER;
 }
 
 void Router::updateDistanceVec(QSharedPointer<Packet> p , int portNum){
-    qDebug() << "router " << ip << " receive distanceVec Packet from " << p->getSourceAddr()
-             << "\n";
+    // qDebug() << "router " << ip << " receive distanceVec Packet from " << p->getSourceAddr()<< "\n";
     QString new_data =  p->getData();
     QVector <QString> distance_info = spliteString(new_data ,',');
     routingTableChanged = false;
@@ -179,23 +243,28 @@ void Router::updateDistanceVec(QSharedPointer<Packet> p , int portNum){
 }
 
 
-QString Router::dataOfRoutingTable(){
+QString Router::dataOfRoutingTable(NodeType nextHopType){
     QString data = "";
     for(auto i = routingTable.begin();i != routingTable.end(); i++){
+        if((nextHopType == EXTERNAL_ROUTER) && getBaseIP(i->destination)==getBaseIP(ip))
+            continue;
         data += i->destination;
         data += ":";
         data += QString::number(i->cost);
         data += ",";
     }
+    data+=getBaseIP(ip)+":0,";
     return data;
 }
 
 void Router::sendRouteTebleInfo(){
-    QString routingTableData = dataOfRoutingTable();
     for(auto neighbour : forwardingTable){
-        Packet packet = Packet(ip ,neighbour->nextHopIP ,routingTableData ,DistanceVec);
-        QSharedPointer<Packet> distanceVecMessage = QSharedPointer<Packet>::create(packet);
-        neighbour->port->sendPacket(distanceVecMessage);
+        if(neighbour->nextHobType != HOST)
+        {
+            Packet packet = Packet(ip ,neighbour->nextHopIP ,dataOfRoutingTable(neighbour->nextHobType) ,DistanceVec);
+            QSharedPointer<Packet> distanceVecMessage = QSharedPointer<Packet>::create(packet);
+            neighbour->port->sendPacket(distanceVecMessage);
+        }
     }
 }
 
@@ -208,7 +277,7 @@ void Router::updatePacketLogs(QSharedPointer<Packet> p , QString log)
 void Router::printRoutingTable()
 {
     for(auto i = routingTable.begin();i != routingTable.end(); i++)
-        qDebug() << "Dest : " + i->destination + " cost : " + QString::number(i->cost) ;
+        qDebug() << "Destination : " + i->destination + " cost : " + QString::number(i->cost) + " next hop: " + i->nextHop ;
 
 }
 

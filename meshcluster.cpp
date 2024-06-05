@@ -38,7 +38,7 @@ void MeshCluster::createMeshRoutersAndHosts() {
         routers.append(temp);
     }
     for(int i = 0; i < 2 * n ; i++)
-        hosts.append(new Host("nothing" , IPV4 , 10));
+        hosts.append(new Host("NOTHING" , IPV4 , 10));
 }
 
 void MeshCluster::connectAllRouters() {
