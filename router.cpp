@@ -45,6 +45,9 @@ IP Router::convertIPv4ToIPv6(IP ipv4Address)
 void Router::onClock(NetworkState ns)
 {
     currentState = ns;
+    if(ns == NeighborIdentification){
+        sendRouteTebleInfo();
+    }
     // qDebug() << "router " + ip + " got clock";
     roundRobinPacketHandler();
 }
@@ -158,7 +161,8 @@ void Router::updateDistanceVec(QSharedPointer<Packet> p , int portNum){
              << "\n";
     QString new_data =  p->getPacket();
     QVector distance_info = spliteString(new_data ,',');
-    bool tableChanged = false;
+    routingTableChanged = false;
+
     for(int i=0; i < distance_info.size(); i++){
         QVector<QString> ip_distance = spliteString(distance_info[i] ,':');
         IP curr_ip = ip_distance[0];
@@ -166,11 +170,11 @@ void Router::updateDistanceVec(QSharedPointer<Packet> p , int portNum){
 
         auto curr_route = routingTable.find(curr_ip);
         if(curr_route == routingTable.end() || curr_route->cost > (new_distance +1)){
-            tableChanged = true;       
+            routingTableChanged = true;
             routingTable[curr_ip] = route(curr_ip , new_distance , p->getSourceAddr());
         }
     }
-    if(tableChanged)
+    if(routingTableChanged)
         sendRouteTebleInfo();
 }
 

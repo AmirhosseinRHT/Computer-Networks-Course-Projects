@@ -30,6 +30,7 @@ private:
     void updateDistanceVec(QSharedPointer<Packet> p , int portNum);
     void sendRouteTebleInfo();
     QString dataOfRoutingTable();
+    bool routingTableChanged;
 
 public slots:
     void onClock(NetworkState ns) override;
