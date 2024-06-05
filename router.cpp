@@ -204,3 +204,16 @@ void Router::updatePacketLogs(QSharedPointer<Packet> p , QString log)
     p->icreaseInQueueCycle();
     p->addLog(log);
 }
+
+void Router::printRoutingTable()
+{
+    for(auto i = routingTable.begin();i != routingTable.end(); i++)
+        qDebug() << "Dest : " + i->destination + " cost : " + QString::number(i->cost) ;
+
+}
+
+void Router::printTable(QString _ip)
+{
+    if(ip == _ip)
+        printRoutingTable();
+}

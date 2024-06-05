@@ -1,14 +1,16 @@
 QT = core
 QT += network
+QT += concurrent
 CONFIG += c++17 cmdline
 
 SOURCES += \
         cluster.cpp \
-        controller.cpp \
+        commandreader.cpp \
         defs.cpp \
         host.cpp \
         main.cpp \
         meshcluster.cpp \
+        network.cpp \
         node.cpp \
         packet.cpp \
         port.cpp \
@@ -19,10 +21,11 @@ SOURCES += \
 
 HEADERS += \
         cluster.hpp \
+        commandreader.hpp \
         meshcluster.hpp \
+        network.hpp \
         ringstarcluster.hpp \
         router.hpp \
-        controller.hpp \
         defs.hpp \
         host.hpp \
         node.hpp \

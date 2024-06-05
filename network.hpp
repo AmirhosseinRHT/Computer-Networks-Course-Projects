@@ -1,22 +1,24 @@
-#ifndef CONTROLLER_HPP
-#define CONTROLLER_HPP
+#ifndef NETWORK_H
+#define NETWORK_H
 
 #include <QObject>
 #include "meshcluster.hpp"
 #include "ringstarcluster.hpp"
 #include "signaller.hpp"
 #include "toruscluster.hpp"
+#include "commandreader.hpp"
 
-class Controller : public QObject
+class Network : public QObject
 {
     Q_OBJECT
 public:
-   explicit Controller(IP _ringStarBaseIP , IP _meshBaseIP ,IP _torusBaseIP , int _MeshSize , int TorusSize , QObject * parent = nullptr);
-   ~Controller();
+    explicit Network(IP _ringStarBaseIP , IP _meshBaseIP ,IP _torusBaseIP , int _MeshSize , int TorusSize , QObject * parent = nullptr);
+    ~Network();
    MeshCluster * getMeshCluster(){return mCluster;}
    RingStarCluster * getRingStarCluster(){return rsCluster;}
    TorusCluster * getTorusCluster(){return tCluster;}
-   void ConnectClockToNodes(Signaller * signaller);
+   void ConnectSignalsToNodes(Signaller * signaller , CommandReader * cr);
+   void createNetwork();
 private:
     MeshCluster * mCluster;
     RingStarCluster * rsCluster;
@@ -30,4 +32,4 @@ signals:
    void Clock();
 };
 
-#endif // CONTROLLER_HPP
+#endif // NETWORK_H

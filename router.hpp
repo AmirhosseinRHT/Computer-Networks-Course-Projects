@@ -23,6 +23,7 @@ public:
     void handleDequeuedPacket(QSharedPointer<Packet> p , int portNum);
     void updatePacketLogs(QSharedPointer<Packet> p , QString log);
     bool isEdgeRouter;
+    void printRoutingTable();
 private:
     QMap<IP ,  route> routingTable;
     QVector<forward *> forwardingTable;
@@ -34,6 +35,7 @@ private:
 
 public slots:
     void onClock(NetworkState ns) override;
+    void printTable(QString _ip);
 };
 
 #endif // ROUTER_HPP

@@ -61,13 +61,11 @@ void MeshCluster::connectHostsToRouters()
 void MeshCluster::moveNodesToThread() {
     for (int i=0; i< n; i++)
         for (int j = 0 ; j < n; j++)
-            routers[i][j]->moveToThread(this->thread());
+            routers[i][j]->moveToThread(threads[i*n + j]);
     for(int i=0 ; i < 2 * n ; i++)
-        hosts[i]->moveToThread(this->thread());
+        hosts[i]->moveToThread(threads[n*n + i]);
     for(int i = 0 ; i < threads.size() ; i ++ )
-    {
-        // threads[i]->start();
-    }
+        threads[i]->start();
 }
 
 void MeshCluster::createMeshCluster()
