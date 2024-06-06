@@ -11,6 +11,7 @@ SOURCES += \
         meshcluster.cpp \
         node.cpp \
         packet.cpp \
+        parto.cpp \
         port.cpp \
         ringstarcluster.cpp \
         router.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
         cluster.hpp \
         meshcluster.hpp \
+        parto.hpp \
         ringstarcluster.hpp \
         router.hpp \
         controller.hpp \
