@@ -3,7 +3,7 @@
 Host::Host(IP _ip ,IPversion v ,int _portQueueSize): Node(_ip , v , _portQueueSize)
 {
     port = new Port(_portQueueSize);
-    neighborRouter = "0";
+    neighborRouter = "UNKNOWN";
 }
 
 Host::~Host()
@@ -33,6 +33,15 @@ void Host::getIpFromDHCPServer()
 }
 
 
+void Host::sendPacketTo(QString src , QString dest)
+{
+    if(src == ip)
+    {
+        Packet pack(ip , dest , "!!!!!Hello!!!!!" , Data);
+        port->sendPacket(QSharedPointer<Packet>::create(pack));
+    }
+}
+
 void Host::handleIncomingPackets()
 {
     while(!port->isQueueEmpty())
@@ -45,8 +54,11 @@ void Host::handleIncomingPackets()
         }
         else if(p->getType() == Data)
         {
+            qDebug() << "------------------------------------------------------------------";
             qDebug() << "Host " + p->getDestiantionAddr() + " Recieved Packet from " + p->getSourceAddr()
                             + " data : " + p->getData();
+            p->printLogs();
+            qDebug() << "------------------------------------------------------------------";
         }
     }
 }

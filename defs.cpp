@@ -18,3 +18,11 @@ QVector<QString> spliteString(const QString &str, char del)
         resulte_vector.push_back(temp);
     return resulte_vector;
 }
+
+QString getBaseIP(const QString& _ip) {
+    QStringList octets = _ip.split('.');
+    if (octets.size() >= 2) {
+        return octets[0] + "." + octets[1];
+    }
+    return "";
+}

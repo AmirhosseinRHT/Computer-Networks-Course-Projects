@@ -6,10 +6,14 @@ RingStarCluster::RingStarCluster(ClusterType _type , IP _baseIP): Cluster{_type 
 
 QVector <Router *> RingStarCluster::getEdgeRouters()
 {
-    QVector<Router *> temp;
+    QVector<Router *> edges;
     if(routers.size() >= 3)
-        temp = QVector<Router *> (routers.begin() , routers.begin()+3);
-    return temp;
+    {
+        for(int i = 0 ; i < 3 ;i++)
+            routers[i]->isEdgeRouter = true;
+        edges = QVector<Router *> (routers.begin() , routers.begin()+3);
+    }
+    return edges;
 }
 
 RingStarCluster::~RingStarCluster()
@@ -21,21 +25,21 @@ RingStarCluster::~RingStarCluster()
 void RingStarCluster::moveNodesToThread()
 {
     for(int i = 0 ; i < 5 ; i++)
-        hosts[i]->moveToThread(this->thread());
+        hosts[i]->moveToThread(threads[i]);
     for (int i = 0; i < 8; i++)
-        routers[i]->moveToThread(this->thread());
+        routers[i]->moveToThread(threads[i+5]);
     for(int i = 0 ; i < threads.size() ; i ++ )
     {
-        // threads[i]->start();
+        threads[i]->start();
     }
 }
 
 void RingStarCluster::createRoutersAndHosts()
 {
     for(int i = 0 ; i < 8 ; i++)
-        routers.append(new Router(getBaseIP() + "." + QString::number(i+1) + ".1" , IPV4 , 10));
+        routers.append(new Router(getBaseIP() + "." + QString::number(i+1) + ".1" , IPV4 , 100));
     for(int i = 0 ; i < 5 ; i++)
-        hosts.append(new Host("nothing" , IPV4 , 10));
+        hosts.append(new Host("NOTHING" , IPV4 , 10));
 }
 
 void RingStarCluster::connectRingStarPorts()
@@ -49,8 +53,8 @@ void RingStarCluster::connectRingStarPorts()
     for (int i = 0; i < 3; i++)
         connectRouterToHost(routers[4] , hosts[i]);
 
-    connectRouterToHost(routers[4] , hosts[3]);
-    connectRouterToHost(routers[4] , hosts[4]);
+    connectRouterToHost(routers[5] , hosts[3]);
+    connectRouterToHost(routers[5] , hosts[4]);
 }
 
 void RingStarCluster::createRingStarCluster()

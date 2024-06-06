@@ -7,7 +7,17 @@ MeshCluster::MeshCluster(ClusterType _type , IP _baseIP , int _n): Cluster{_type
 
 QVector<Router*> MeshCluster::getEdgeRouters()
 {
-    QVector <Router *> edgeRouters ;
+    QVector <Router *> edgeRouters;
+    for (int i = 0; i < routers.size(); i++)
+    {
+        edgeRouters.append(routers[n-1][i]);
+        routers[n-1][i]->isEdgeRouter = true;
+    }
+    for (int i = 0; i < routers.size(); i++)
+    {
+        routers[i][n-1]->isEdgeRouter = true;
+        edgeRouters.append(routers[i][n-1]);
+    }
     return edgeRouters;
 }
 
@@ -23,12 +33,12 @@ void MeshCluster::createMeshRoutersAndHosts() {
     for (int i = 0; i < n ; i++){
         QVector<Router*> temp;
         for (int j = 0; j < n ; j++){
-            temp.append(new Router(getBaseIP() + "." + QString::number(j + i * n + 1) + ".1" , IPV4 , 10));
+            temp.append(new Router(getBaseIP() + "." + QString::number(j + i * n + 1) + ".1" , IPV4 , 100));
         }
         routers.append(temp);
     }
     for(int i = 0; i < 2 * n ; i++)
-        hosts.append(new Host("nothing" , IPV4 , 10));
+        hosts.append(new Host("NOTHING" , IPV4 , 10));
 }
 
 void MeshCluster::connectAllRouters() {
@@ -61,13 +71,11 @@ void MeshCluster::connectHostsToRouters()
 void MeshCluster::moveNodesToThread() {
     for (int i=0; i< n; i++)
         for (int j = 0 ; j < n; j++)
-            routers[i][j]->moveToThread(this->thread());
+            routers[i][j]->moveToThread(threads[i*n + j]);
     for(int i=0 ; i < 2 * n ; i++)
-        hosts[i]->moveToThread(this->thread());
+        hosts[i]->moveToThread(threads[n*n + i]);
     for(int i = 0 ; i < threads.size() ; i ++ )
-    {
-        // threads[i]->start();
-    }
+        threads[i]->start();
 }
 
 void MeshCluster::createMeshCluster()

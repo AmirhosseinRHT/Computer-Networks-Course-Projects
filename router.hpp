@@ -23,17 +23,23 @@ public:
     void handleDequeuedPacket(QSharedPointer<Packet> p , int portNum);
     void updatePacketLogs(QSharedPointer<Packet> p , QString log);
     bool isEdgeRouter;
+    void printRoutingTable();
+    void sendGreetingPacket();
+    void handleGreetingPacket(QSharedPointer<Packet> p , int portNum);
+    void handleDhcpRequest(QSharedPointer<Packet> p, int portNum);
+    void forwardPacket(QSharedPointer<Packet> p);
 private:
     QMap<IP ,  route> routingTable;
     QVector<forward *> forwardingTable;
     QVector<QPair<int,IP>> assignedIPs;
-    void updateDistanceVec(QSharedPointer<Packet> p , int portNum);
+    void updateDistanceVec(QSharedPointer<Packet> p);
     void sendRouteTebleInfo();
-    QString dataOfRoutingTable();
+    QString dataOfRoutingTable(NodeType nextHopType);
     bool routingTableChanged;
 
 public slots:
     void onClock(NetworkState ns) override;
+    void printTable(QString _ip);
 };
 
 #endif // ROUTER_HPP

@@ -22,6 +22,7 @@ private:
     Port * port;
 public slots:
     void onClock(NetworkState ns) override;
+    void sendPacketTo(QString src , QString dest);
 };
 
 #endif // HOST_HPP
