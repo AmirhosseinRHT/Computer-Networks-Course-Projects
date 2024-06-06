@@ -27,12 +27,12 @@ public:
     void sendGreetingPacket();
     void handleGreetingPacket(QSharedPointer<Packet> p , int portNum);
     void handleDhcpRequest(QSharedPointer<Packet> p, int portNum);
-    void forwardPacket(QSharedPointer<Packet> p, int portNum);
+    void forwardPacket(QSharedPointer<Packet> p);
 private:
     QMap<IP ,  route> routingTable;
     QVector<forward *> forwardingTable;
     QVector<QPair<int,IP>> assignedIPs;
-    void updateDistanceVec(QSharedPointer<Packet> p , int portNum);
+    void updateDistanceVec(QSharedPointer<Packet> p);
     void sendRouteTebleInfo();
     QString dataOfRoutingTable(NodeType nextHopType);
     bool routingTableChanged;

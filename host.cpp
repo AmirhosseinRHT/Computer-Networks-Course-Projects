@@ -54,9 +54,11 @@ void Host::handleIncomingPackets()
         }
         else if(p->getType() == Data)
         {
+            qDebug() << "------------------------------------------------------------------";
             qDebug() << "Host " + p->getDestiantionAddr() + " Recieved Packet from " + p->getSourceAddr()
                             + " data : " + p->getData();
             p->printLogs();
+            qDebug() << "------------------------------------------------------------------";
         }
     }
 }
