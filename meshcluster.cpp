@@ -33,12 +33,12 @@ void MeshCluster::createMeshRoutersAndHosts() {
     for (int i = 0; i < n ; i++){
         QVector<Router*> temp;
         for (int j = 0; j < n ; j++){
-            temp.append(new Router(getBaseIP() + "." + QString::number(j + i * n + 1) + ".1" , IPV4 , 100));
+            temp.append(new Router(getBaseIP() + "." + QString::number(j + i * n + 1) + ".1" , IPV6 , 100));
         }
         routers.append(temp);
     }
     for(int i = 0; i < 2 * n ; i++)
-        hosts.append(new Host("NOTHING" , IPV4 , 10));
+        hosts.append(new Host("NOTHING" , IPV6 , 10));
 }
 
 void MeshCluster::connectAllRouters() {
@@ -47,13 +47,13 @@ void MeshCluster::connectAllRouters() {
         for (int j = 0 ; j < n; j++)
         {
             if(j - 1 >= 0)
-                connectRouters(routers[i][j],routers[i][ j - 1]); // left router
+                connectRouters(routers[i][j],routers[i][ j - 1]);
             if(i - 1 >= 0)
-                connectRouters(routers[i][j],routers[i - 1][ j ]); // upper router
+                connectRouters(routers[i][j],routers[i - 1][ j ]);
             if(j + 1 < n )
-                connectRouters(routers[i][j],routers[i][ j + 1]); // right router
+                connectRouters(routers[i][j],routers[i][ j + 1]);
             if(i + 1 < n)
-                connectRouters(routers[i][j],routers[i + 1][ j ]); // down router
+                connectRouters(routers[i][j],routers[i + 1][ j ]);
         }
     }
 }

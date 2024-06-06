@@ -2,6 +2,7 @@
 
 Host::Host(IP _ip ,IPversion v ,int _portQueueSize): Node(_ip , v , _portQueueSize)
 {
+    ip = _ip;
     port = new Port(_portQueueSize);
     neighborRouter = "UNKNOWN";
 }
@@ -13,7 +14,7 @@ Host::~Host()
 
 QSharedPointer<Packet> Host::createPacket(IP destination , QString data)
 {
-    Packet pack(ip , destination , data , Data);
+    Packet pack(ip , getCompatibleIP(destination , ver) , data , Data , ver);
     return QSharedPointer<Packet>::create(pack);
 }
 
@@ -28,16 +29,16 @@ void Host::onClock(NetworkState ns)
 
 void Host::getIpFromDHCPServer()
 {
-        Packet pack(ip , neighborRouter , "IP_REQUEST" , DHCP);
+        Packet pack(ip , neighborRouter , "IP_REQUEST" , DHCP , ver);
         port->sendPacket(QSharedPointer<Packet>::create(pack));
 }
 
 
 void Host::sendPacketTo(QString src , QString dest)
 {
-    if(src == ip)
+    if(ip == getCompatibleIP(src , ver))
     {
-        Packet pack(ip , dest , "!!!!!Hello!!!!!" , Data);
+        Packet pack(ip , getCompatibleIP(dest , ver) , "!!!!!Hello!!!!!" , Data , ver);
         port->sendPacket(QSharedPointer<Packet>::create(pack));
     }
 }
@@ -49,15 +50,18 @@ void Host::handleIncomingPackets()
         QSharedPointer<Packet> p = port->dequeue();
         if(p->getData() == "DHCP_ANSWER" && p->getType() == DHCP)
         {
-            ip = p->getDestiantionAddr();
-            neighborRouter = p->getSourceAddr();
+            ip = getCompatibleIP(p->getDestiantionAddr() , ver);
+            neighborRouter = getCompatibleIP(p->getSourceAddr() , ver);
         }
         else if(p->getType() == Data)
         {
+            QSharedPointer<Packet> recieved = p;
+            if(p->maskedPacket)
+                recieved = p->getInnerPacket();
             qDebug() << "------------------------------------------------------------------";
-            qDebug() << "Host " + p->getDestiantionAddr() + " Recieved Packet from " + p->getSourceAddr()
-                            + " data : " + p->getData();
-            p->printLogs();
+            qDebug() << "Host " + recieved->getDestiantionAddr() + " Recieved Packet from " + recieved->getSourceAddr()
+                            + " data : " + recieved->getData();
+            recieved->printLogs();
             qDebug() << "------------------------------------------------------------------";
         }
     }

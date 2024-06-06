@@ -3,7 +3,7 @@
 
 Node::Node(IP _ip ,IPversion v  , int _portQueueSize, QObject *parent): QObject{parent}
 {
-    ip = _ip;
+    ip = getCompatibleIP(_ip , v);
     ver = v;
     portQueueSize = _portQueueSize;
 }

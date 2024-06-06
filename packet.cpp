@@ -1,6 +1,6 @@
 #include "packet.hpp"
 
-Packet::Packet(IP source ,IP dest ,IP _data , PacketType _type)
+Packet::Packet(IP source ,IP dest ,IP _data , PacketType _type , IPversion _v)
 {
     sourceAddr = source;
     destinationAddr = dest;
@@ -10,6 +10,12 @@ Packet::Packet(IP source ,IP dest ,IP _data , PacketType _type)
     inQueueCycle = 0;
     maskedPacket = false;
     innerPacket = NULL;
+    ipVer = _v;
+}
+void Packet::setInnerPacket(QSharedPointer<Packet> inP)
+{
+    innerPacket = inP ;
+    maskedPacket = true;
 }
 
 void Packet::icreaseInQueueCycle(int val)

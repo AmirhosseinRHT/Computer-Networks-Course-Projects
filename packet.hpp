@@ -7,7 +7,7 @@
 class Packet
 {
 public:
-    explicit Packet(IP source ,IP dest ,QString _data ,PacketType _type);
+    explicit Packet(IP source ,IP dest ,QString _data ,PacketType _type , IPversion _v);
     virtual ~Packet(){}
     QString getPacket();
     IP getDestiantionAddr() {return destinationAddr;}
@@ -25,6 +25,9 @@ public:
     QSharedPointer<Packet> getInnerPacket(){return innerPacket;}
     void addLog(QString log);
     void printLogs();
+    IPversion getIPVersion(){return ipVer;}
+    bool maskedPacket;
+    void setInnerPacket(QSharedPointer<Packet> inP);
 private:
     IP sourceAddr;
     IP destinationAddr;
@@ -33,8 +36,8 @@ private:
     QString generateTime;
     QVector<QPair<int ,QString>> logs;
     int inQueueCycle;
-    bool maskedPacket;
     QSharedPointer<Packet> innerPacket;
+    IPversion ipVer;
 };
 
 #endif // PACKET_HPP
