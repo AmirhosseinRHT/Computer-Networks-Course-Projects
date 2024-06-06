@@ -1,10 +1,32 @@
 #include "host.hpp"
+#include<QRandomGenerator>
+#include<QTime>
+
+QVector<QString> ip_list= {
+    "192.170.1.2",
+    "192.170.1.3",
+    "192.170.2.2",
+    "192.170.2.3",
+    "192.170.3.2",
+    "192.170.3.3",
+    "192.170.4.2",
+    "192.170.4.3",
+    "200.200.3.2",
+    "200.200.6.2",
+    "200.200.9.2",
+    "192.168.5.2",
+    "192.168.5.3",
+    "192.168.5.4",
+    "192.168.6.2",
+    "192.168.6.3"
+};
 
 Host::Host(IP _ip ,IPversion v ,int _portQueueSize): Node(_ip , v , _portQueueSize)
 {
     ip = _ip;
     port = new Port(_portQueueSize);
     neighborRouter = "UNKNOWN";
+    packetGenerator = Parto(10 , 1);
 }
 
 Host::~Host()
@@ -23,8 +45,13 @@ void Host::onClock(NetworkState ns)
     currentState = ns;
     if(currentState == InteractionWithDHCP)
         getIpFromDHCPServer();
-    else
+    else{
+        if(packetGenerator.generate()){
+            auto rg = QRandomGenerator(QTime::currentTime().msec());
+            sendPacketTo(ip ,ip_list[rg.generate() % 16]);
+        }
         handleIncomingPackets();
+    }
 }
 
 void Host::getIpFromDHCPServer()
@@ -39,6 +66,7 @@ void Host::sendPacketTo(QString src , QString dest)
     if(ip == getCompatibleIP(src , ver))
     {
         Packet pack(ip , getCompatibleIP(dest , ver) , "!!!!!Hello!!!!!" , Data , ver);
+        qDebug() << "start sending from " << src << " to " << dest << "\n";
         port->sendPacket(QSharedPointer<Packet>::create(pack));
     }
 }

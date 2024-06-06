@@ -6,7 +6,7 @@ class Parto
 public:
     Parto();
     Parto(double sp , double shp);
-    void generate();
+    bool generate();
 
 private:
     int x;

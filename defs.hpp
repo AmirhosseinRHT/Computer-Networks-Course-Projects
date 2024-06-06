@@ -28,4 +28,6 @@ IP convertIPv6ToIPv4(IP ipv6Address);
 
 IP getCompatibleIP(IP current , IPversion ver);
 
+
+
 #endif // DEFS_HPP
