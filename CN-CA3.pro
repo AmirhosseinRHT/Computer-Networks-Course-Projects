@@ -13,6 +13,7 @@ SOURCES += \
         network.cpp \
         node.cpp \
         packet.cpp \
+        parto.cpp \
         port.cpp \
         ringstarcluster.cpp \
         router.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
         cluster.hpp \
         commandreader.hpp \
         meshcluster.hpp \
+        parto.hpp \
         network.hpp \
         ringstarcluster.hpp \
         router.hpp \
