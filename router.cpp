@@ -3,6 +3,7 @@
 Router::Router(IP _ip,IPversion v ,int _portQueueSize , bool isEdge) :Node(_ip ,v , _portQueueSize) {
     assignedIPs.append(QPair<int,QString> (-1 , getCompatibleIP(ip , IPV4)));
     isEdgeRouter = isEdge;
+    routeAlgo = OSBF;
 }
 
 Router::~Router()
@@ -191,7 +192,6 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
 
 
 QString Router::Dijkstra(IP s, IP d){
-    printTopo();
     QVector<IP> qu;
     qu.append(s);
     int siz =0;
@@ -364,7 +364,10 @@ void Router::printTable(QString _ip)
 {
     if(ip == getCompatibleIP(_ip , ver))
     {
+        if(routeAlgo == RIP)
         printRoutingTable();
+        else
+            printTopo();
     }
 }
 
