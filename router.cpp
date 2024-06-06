@@ -191,6 +191,7 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
 
 
 QString Router::Dijkstra(IP s, IP d){
+    printTopo();
     QVector<IP> qu;
     qu.append(s);
     int siz =0;
@@ -338,7 +339,7 @@ void Router::updateTopology(QSharedPointer<Packet> p , int pn){
     auto ip_list = spliteString(dataParts[1] , ',');
     auto centerIp = dataParts[0];
 
-    centerIp = convertIPv6ToIPv4(centerIp);
+    centerIp = getCompatibleIP(centerIp , IPV4);
     if(getBaseIP(ip) != getBaseIP(centerIp))
         return;
     if(networkTopology.find(centerIp) == networkTopology.end()){

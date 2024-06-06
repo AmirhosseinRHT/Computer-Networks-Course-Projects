@@ -46,14 +46,14 @@ void Host::onClock(NetworkState ns)
     if(currentState == InteractionWithDHCP)
         getIpFromDHCPServer();
     else{
-        if(packetGeneratorDisttr.generate()){
-            auto rg = QRandomGenerator(QTime::currentTime().msec());
-            auto dest_ip = ip_list[rg.generate() % 16];
-            while(getBaseIP(ip) == getBaseIP(dest_ip)){
-                dest_ip = ip_list[rg.generate() % 16];
-            }
-            sendPacketTo(ip ,dest_ip);
-        }
+        // if(packetGeneratorDisttr.generate()){
+        //     auto rg = QRandomGenerator(QTime::currentTime().msec());
+        //     auto dest_ip = ip_list[rg.generate() % 16];
+        //     while(getBaseIP(ip) == getBaseIP(dest_ip)){
+        //         dest_ip = ip_list[rg.generate() % 16];
+        //     }
+        //     sendPacketTo(ip ,dest_ip);
+        // }
         handleIncomingPackets();
     }
 }
