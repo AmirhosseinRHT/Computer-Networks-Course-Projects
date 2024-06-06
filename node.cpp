@@ -6,6 +6,7 @@ Node::Node(IP _ip ,IPversion v  , int _portQueueSize, QObject *parent): QObject{
     ip = getCompatibleIP(_ip , v);
     ver = v;
     portQueueSize = _portQueueSize;
+    routeAlgo = RIP;
 }
 
 QVector<QString> Node::splitPacket(QString str, char del)

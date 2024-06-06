@@ -31,9 +31,34 @@ void Router::onClock(NetworkState ns)
         sendGreetingPacket();
     }
     else if(ns == NeighborIdentification){
-        sendRouteTebleInfo();
+        if(routeAlgo == OSBF)
+            sendMyNeighbour();
+        else
+                sendRouteTebleInfo();
+
+
     }
     roundRobinPacketHandler();
+}
+
+QString Router::dataOfNeighbour(){
+    QString data = "";
+    data += ip;
+    data += ":";
+    for(auto neighbour : forwardingTable){
+        data += neighbour->nextHopIP;
+        data += ",";
+    }
+    return data;
+}
+
+void Router::sendMyNeighbour(){
+    QString data = dataOfNeighbour();
+    for(auto neighbour : forwardingTable){
+        Packet packet = Packet(ip ,neighbour->nextHopIP ,data , DistanceVec, ver);
+        QSharedPointer<Packet> greetingPacket = QSharedPointer<Packet>::create(packet);
+        neighbour->port->sendPacket(greetingPacket);
+    }
 }
 
 void Router::sendGreetingPacket()
@@ -145,7 +170,10 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
         handleDhcpRequest(p, portNum);
         break;
     case DistanceVec:
-        updateDistanceVec(p);
+        if(routeAlgo == OSBF)
+            updateTopology(p);
+        else
+            updateDistanceVec(p);
         break;
     case Data:
         forwardPacket(p);
@@ -253,6 +281,11 @@ void Router::sendRouteTebleInfo(){
             neighbour->port->sendPacket(distanceVecMessage);
         }
     }
+}
+
+
+void Router::updateTopology(QSharedPointer<Packet> p){
+
 }
 
 void Router::updatePacketLogs(QSharedPointer<Packet> p , QString log)

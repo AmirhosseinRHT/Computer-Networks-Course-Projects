@@ -16,6 +16,8 @@ enum NodeType {HOST , LOCAL_ROUTER ,EXTERNAL_ROUTER};
 
 enum NetworkState {InteractionWithDHCP , RouterGreeting , NeighborIdentification , SendData};
 
+enum RoutingAlgorithm {OSBF , RIP};
+
 QVector<QString> spliteString(const QString &str, char del);
 
 QString getBaseIP(const QString& _ip);

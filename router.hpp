@@ -27,15 +27,21 @@ public:
     void handleDhcpRequest(QSharedPointer<Packet> p, int portNum);
     void forwardPacket(QSharedPointer<Packet> p);
     void processPacket(QSharedPointer<Packet> p, IP destIP, QSharedPointer<Packet> forwardingPacket);
+    void sendMyNeighbour();
 
 private:
     QMap<IP ,  route> routingTable;
     QVector<forward *> forwardingTable;
     QVector<QPair<int,IP>> assignedIPs;
+    QMap<IP , QVector<IP>> NetworkTopology;
     void updateDistanceVec(QSharedPointer<Packet> p);
+    void updateTopology(QSharedPointer<Packet> p);
     void sendRouteTebleInfo();
     QString dataOfRoutingTable(NodeType nextHopType);
+    QString dataOfNeighbour();
     bool routingTableChanged;
+
+
 
 public slots:
     void onClock(NetworkState ns) override;

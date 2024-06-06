@@ -20,7 +20,7 @@ public:
 private:
     IP neighborRouter;
     Port * port;
-    Parto packetGenerator;
+    Parto packetGeneratorDisttr;
 public slots:
     void onClock(NetworkState ns) override;
     void sendPacketTo(QString src , QString dest);

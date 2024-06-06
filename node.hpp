@@ -16,6 +16,7 @@ public:
     IPversion ver;
     int getPortQueueSize(){return portQueueSize;}
     QVector<QString> splitPacket(QString str, char del);
+    RoutingAlgorithm routeAlgo;
 protected:
     NetworkState currentState;
     IP ip;

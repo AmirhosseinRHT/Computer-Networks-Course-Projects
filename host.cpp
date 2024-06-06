@@ -26,7 +26,7 @@ Host::Host(IP _ip ,IPversion v ,int _portQueueSize): Node(_ip , v , _portQueueSi
     ip = _ip;
     port = new Port(_portQueueSize);
     neighborRouter = "UNKNOWN";
-    packetGenerator = Parto(10 , 1);
+    packetGeneratorDisttr = Parto(10 , 1);
 }
 
 Host::~Host()
@@ -46,9 +46,13 @@ void Host::onClock(NetworkState ns)
     if(currentState == InteractionWithDHCP)
         getIpFromDHCPServer();
     else{
-        if(packetGenerator.generate()){
+        if(packetGeneratorDisttr.generate()){
             auto rg = QRandomGenerator(QTime::currentTime().msec());
-            sendPacketTo(ip ,ip_list[rg.generate() % 16]);
+            auto dest_ip = ip_list[rg.generate() % 16];
+            while(getBaseIP(ip) == getBaseIP(dest_ip)){
+                dest_ip = ip_list[rg.generate() % 16];
+            }
+            sendPacketTo(ip ,dest_ip);
         }
         handleIncomingPackets();
     }
