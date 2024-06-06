@@ -30,6 +30,7 @@ public:
     void sendMyNeighbour();
     void sendPacketToAllports(QSharedPointer<Packet> p  , int pn);
     QString Dijkstra(IP s , IP d);
+    void printTopo();
 
 
 private:

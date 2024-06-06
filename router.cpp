@@ -366,3 +366,16 @@ void Router::printTable(QString _ip)
         printRoutingTable();
     }
 }
+
+void Router::printTopo(){
+    qDebug() << "__________________\nprint topo:\n";
+    for(auto n = networkTopology.begin(); n !=  networkTopology.end() ; n++){
+
+        qDebug() << n.key() << ":";
+        for(auto p : networkTopology[n.key()]){
+            qDebug() << p << " - ";
+        }
+        qDebug() << "\n\n";
+    }
+    qDebug() << "_________________";
+}
