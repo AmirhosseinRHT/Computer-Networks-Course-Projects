@@ -70,5 +70,57 @@
 
 
 
+#### موجودیت Cluster
+
+![cluster](https://github.com/AmirhosseinRHT/CN-CA3/assets/102304346/3d5cc18e-9f5d-4292-bcdd-56f7ac69ec10)
+
+وظیفه نگهداری روتر ها و هاست ها و اتصال آنها و انتقال آنها به روی ترد هارا دارد. همچنین هر کلاستر یک BaseIP دارد که آیپی روتر های آن زیر مجموعه ای از آن خواهند بود .
+سه زیر کلاس این کلاس عبارتند از :
+##### کلاستر Mesh
+این کلاستر ساختار دو بعدی دارد که 16 روتر به صورت 4x4 به هم متصل اند 
+![mesh](https://github.com/AmirhosseinRHT/CN-CA3/assets/102304346/03aa0c14-52bb-4a2f-8263-e50e91585290)
+
+اتصال روتر ها :
+![mesh connection](https://github.com/AmirhosseinRHT/CN-CA3/assets/102304346/ac64bfe3-da7f-4d37-adfd-1255a9d3b1e9)
+
+انتقال به ترد : 
+به تعداد نود ها ترد ایجاد میکنیم و هر نود را به آن ترد منتقل میکنیم.
+
+![mesh thread](https://github.com/AmirhosseinRHT/CN-CA3/assets/102304346/eed5bb80-370c-4eb0-8b8a-b84a5aad75f4)
+
+#### کلاستر Ring Star
+این کلاستر به صورت یک رینگ است که در وسط آن به صورت یکی درمیان روتر وصل است . بقیه بخش ها مانند کلاستر های دیگر است.
+![rs conncet](https://github.com/AmirhosseinRHT/CN-CA3/assets/102304346/cec5d5ff-5139-40ee-876a-0d70215ae682)
+
+#### کلاستر Torus
+این کلاستر هم بسیار شبیه Mesh است با این فرق که روتر های ردیف ها و ستون های edge به هم وصل هستند . 
+
+![torus edges](https://github.com/AmirhosseinRHT/CN-CA3/assets/102304346/dc1890f7-b60f-4d4e-a37b-906c3c7266b5)
+
+#### موجودیت Network
+کلاستر ها در این کلاس ایحاد و به هم وصل میشوند و سیگنال های کلاک هم به نود ها متصل میشود. 
+
+![network](https://github.com/AmirhosseinRHT/CN-CA3/assets/102304346/c7be772c-f902-4b23-ae1a-41679be1d178)
+
+اتصال روتر های edge در network
+
+![network edges](https://github.com/AmirhosseinRHT/CN-CA3/assets/102304346/89360e50-2a0c-4801-be97-e718bbbd8254)
+
+#### موجودیت Signaller
+این کلاس وظیفه ایجاد سیگنال کلاک را دارد و در بازه های زمانی مشخصی که در کانستراکتور میگیرد ، سیگنال را emit میکند.
+
+![signaller main](https://github.com/AmirhosseinRHT/CN-CA3/assets/102304346/96b8180c-cc58-4c01-8e8f-470f99650c21)
+
+#### توزیع Pareto
+یک کلاس برای این توزیع ایجاد شده است که بر اساس زمان به هاست ها درخواست ارسال بسته را ارسال میکند .
+
+![oareto](https://github.com/AmirhosseinRHT/CN-CA3/assets/102304346/4e02513d-7b00-4e5d-8393-f84434efa41f)
+
+#### تابع main
+ سه آبجکت از نوع Signaller , Network , CommandReader ایجاد میکنیم که هرکدام به سه ترد متفاوت منتقل میشوند و برنامه اجرا میشود
+ 
+![main](https://github.com/AmirhosseinRHT/CN-CA3/assets/102304346/61633537-843b-4130-8263-91f853246d3e)
+
+### اجرای برنامه 
 
 
