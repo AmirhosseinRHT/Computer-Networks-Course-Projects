@@ -44,9 +44,12 @@ void Router::onClock(NetworkState ns)
 QString Router::dataOfNeighbour(){
     QString data = "";
     data += ip;
-    data += ":";
+    data += "$";
     for(auto neighbour : forwardingTable){
-        data += neighbour->nextHopIP;
+        if(neighbour->nextHobType == EXTERNAL_ROUTER)
+            data += getBaseIP(neighbour->nextHopIP);
+        else
+            data += neighbour->nextHopIP;
         data += ",";
     }
     return data;
@@ -171,7 +174,7 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
         break;
     case DistanceVec:
         if(routeAlgo == OSBF)
-            updateTopology(p);
+            updateTopology(p , portNum);
         else
             updateDistanceVec(p);
         break;
@@ -184,6 +187,34 @@ void Router::handleDequeuedPacket(QSharedPointer<Packet> p , int portNum)
     default:
         break;
     }
+}
+
+
+QString Router::Dijkstra(IP s, IP d){
+    QVector<IP> qu;
+    qu.append(s);
+    int siz =0;
+    QMap<IP , IP> f;
+    f[s] = "-1";
+    while (siz < qu.size()) {
+
+        auto curr = qu[siz];
+        if(curr == d)
+            break;
+        for(IP neighbor : networkTopology[curr]){
+            if(f.find(neighbor) == f.end()){
+                f[neighbor] = curr;
+                qu.push_back(neighbor);
+
+            }
+        }
+        siz++;
+    }
+    auto curr = d;
+    while (f[curr] != s) {
+        curr = f[curr];
+    }
+    return curr;
 }
 
 void Router::forwardPacket(QSharedPointer<Packet> p)
@@ -213,6 +244,19 @@ void Router::forwardPacket(QSharedPointer<Packet> p)
     if(getBaseIP(getCompatibleIP(forwardingPacket->getDestiantionAddr() , IPV4)) != getBaseIP(getCompatibleIP(ip , IPV4)))
         destIP = getBaseIP(getCompatibleIP(forwardingPacket->getDestiantionAddr() , IPV4));
 
+    if(routeAlgo == OSBF){
+        if(getBaseIP(ip) != getBaseIP(destIP))
+            destIP = getBaseIP(destIP);
+        auto nextHobIp = Dijkstra(ip ,destIP);
+        for(int j =0 ; j < forwardingTable.size();j++)
+            if(forwardingTable[j]->nextHopIP == nextHobIp){
+                forwardingPacket->addLog("forwarded by router:" + ip +" to hop: " + nextHobIp);
+                forwardingPacket->icreaseInQueueCycle();
+                forwardingTable[j]->port->sendPacket(forwardingPacket);
+                return;
+            }
+        return;
+    }
     for(auto i = routingTable.begin();i != routingTable.end(); i++){
         if(i->destination == destIP){
             for(int j =0 ; j < forwardingTable.size();j++)
@@ -283,9 +327,24 @@ void Router::sendRouteTebleInfo(){
     }
 }
 
+void Router::sendPacketToAllports(QSharedPointer<Packet> p ,int pn){
+    for(auto neighbour : forwardingTable){
+        neighbour->port->sendPacket(p);
+    }
+}
 
-void Router::updateTopology(QSharedPointer<Packet> p){
+void Router::updateTopology(QSharedPointer<Packet> p , int pn){
+    auto dataParts = spliteString(p->getData(), '$');
+    auto ip_list = spliteString(dataParts[1] , ',');
+    auto centerIp = dataParts[0];
 
+    centerIp = convertIPv6ToIPv4(centerIp);
+    if(getBaseIP(ip) != getBaseIP(centerIp))
+        return;
+    if(networkTopology.find(centerIp) == networkTopology.end()){
+        networkTopology[centerIp] = ip_list;
+        sendPacketToAllports(p , pn);
+    }
 }
 
 void Router::updatePacketLogs(QSharedPointer<Packet> p , QString log)

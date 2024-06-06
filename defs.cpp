@@ -65,6 +65,9 @@ IP convertIPv4ToIPv6(IP ipv4Address) {
 
 IP convertIPv6ToIPv4(IP ipv6Address) {
     QStringList parts = ipv6Address.split(":");
+    if(ipv6Address.split(".").size() == 4){
+        return ipv6Address;
+    }
     if (parts.size() != 7 || !parts[0].isEmpty() || !parts[1].isEmpty() || parts[2] != "FFFF") {
         return QString(); // Invalid IPv4-mapped IPv6 address
     }

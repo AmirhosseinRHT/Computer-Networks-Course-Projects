@@ -28,14 +28,17 @@ public:
     void forwardPacket(QSharedPointer<Packet> p);
     void processPacket(QSharedPointer<Packet> p, IP destIP, QSharedPointer<Packet> forwardingPacket);
     void sendMyNeighbour();
+    void sendPacketToAllports(QSharedPointer<Packet> p  , int pn);
+    QString Dijkstra(IP s , IP d);
+
 
 private:
     QMap<IP ,  route> routingTable;
     QVector<forward *> forwardingTable;
     QVector<QPair<int,IP>> assignedIPs;
-    QMap<IP , QVector<IP>> NetworkTopology;
+    QMap<IP , QVector<IP> > networkTopology;
     void updateDistanceVec(QSharedPointer<Packet> p);
-    void updateTopology(QSharedPointer<Packet> p);
+    void updateTopology(QSharedPointer<Packet> p , int pn);
     void sendRouteTebleInfo();
     QString dataOfRoutingTable(NodeType nextHopType);
     QString dataOfNeighbour();
