@@ -1,0 +1,15 @@
+*.autosave
+*.o
+*.obj
+*.orig
+*.rej
+*.so
+.DS_Store
+*.vcproj
+# MinGW generated files
+*.Debug
+*.Release
+*.vscode
+
+cli
+ser
