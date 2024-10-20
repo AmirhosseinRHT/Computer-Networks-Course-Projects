@@ -26,13 +26,7 @@ private:
 
 public:
     WebRTCClientOferrer();
-    WebRTCClientOferrer(std::string _ip){
-        std::cout << "oferrer   ----   client\n ";
-        rtc::InitLogger(rtc::LogLevel::Warning);
-        ip = _ip;
-        initializePeerConnection();
-        role = 1;
-    }
+    WebRTCClientOferrer(std::string _ip);
     void start();
     void close();
     void sendMessage(const char *);
@@ -40,20 +34,14 @@ public:
 
 private:
     void initializePeerConnection();
-    int chooseRole();
     void initializeDataChannel();
     void onDataChannel();
-    void handleCommands();
-    void printMenu();
     int getCommand();
-    void executeCommand(int command, bool& exit);
     void parseDescription(std::string descript);
     void parseCandidate(std::string candid);
     void connect_server();
-    void printConnectionInfo();
     void setPeerConnectionCallbacks();
     void setDataChannelCallbacks();
-
 };
 
 #endif // WEBRTCOFERRER_H

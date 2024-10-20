@@ -28,15 +28,7 @@ private:
 
 public:
     WebRTCClientAnswerer();
-    WebRTCClientAnswerer(std::string _ip){
-        std::cout << "answerer ----- server\n";
-        rtc::InitLogger(rtc::LogLevel::Warning);
-        initializePeerConnection();
-        TCPserver.setPort(12345);
-        TCPserver.Start();
-        role = 2;
-        ip = _ip;
-    }
+    WebRTCClientAnswerer(std::string _ip);
     void start();
     void close();
     void sendMessage(const char *);
@@ -48,16 +40,9 @@ private:
     void initializeDataChannel();
     void onDataChannel();
     void handleCommands();
-    void printMenu();
-    int getCommand();
-    void executeCommand(int command, bool& exit);
-    void parseDescription();
     void parseCandidate();
-
-    void printConnectionInfo();
     void setPeerConnectionCallbacks();
     void setDataChannelCallbacks();
-
 };
 
 #endif // WEBRTCCLIENT_H

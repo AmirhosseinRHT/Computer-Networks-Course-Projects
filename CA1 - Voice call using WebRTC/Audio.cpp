@@ -1,6 +1,3 @@
-// Copyright (C) 2021 The Qt Company Ltd.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
-
 #include "Audio.h"
 #include <QAudioDevice>
 #include <QAudioSource>
@@ -48,7 +45,6 @@ qreal AudioInfo::calculateLevel(const char *data, qint64 len) const
     for (int i = 0; i < numSamples; ++i) {
         for (int j = 0; j < m_format.channelCount(); ++j) {
             float value = m_format.normalizedSampleValue(ptr);
-
             maxValue = qMax(value, maxValue);
             ptr += channelBytes;
         }
@@ -59,9 +55,7 @@ qreal AudioInfo::calculateLevel(const char *data, qint64 len) const
 qint64 AudioInfo::writeData(const char *data, qint64 len)
 {
     m_level = calculateLevel(data, len);
-
     emit levelChanged(m_level);
-
     return len;
 }
 
@@ -69,22 +63,18 @@ RenderArea::RenderArea(QWidget *parent) : QWidget(parent)
 {
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
-
     setMinimumHeight(30);
     setMinimumWidth(200);
 }
 
-void RenderArea::paintEvent(QPaintEvent * /* event */)
+void RenderArea::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-
     painter.setPen(Qt::black);
-
     const QRect frame = painter.viewport() - QMargins(10, 10, 10, 10);
     painter.drawRect(frame);
     if (m_level == 0.0)
         return;
-
     const int pos = qRound(qreal(frame.width() - 1) * m_level);
     painter.fillRect(frame.left() + 1, frame.top() + 1, pos, frame.height() - 1, Qt::red);
 }
@@ -92,7 +82,6 @@ void RenderArea::paintEvent(QPaintEvent * /* event */)
 void RenderArea::setLevel(qreal value)
 {
     m_level = value;
-    //std::cout << debug_number++ << std::endl;
     update();
 }
 
@@ -110,14 +99,14 @@ void InputTest::initializeWindow()
     layout->addWidget(m_modeCallButton1);
 
     m_modeCallButton2 = new QPushButton(this);
-    m_modeCallButton1->setText("call");
+    m_modeCallButton1->setText("Call");
     connect(m_modeCallButton2, &QPushButton::clicked, this, &InputTest::chooseCallMode2);
     layout->addWidget(m_modeCallButton2);
-    m_modeCallButton2->setText("wait for call");
+    m_modeCallButton2->setText("Wait for Call");
     m_canvas = new RenderArea(this);
     layout->addWidget(m_canvas);
     inputIp = new QLineEdit;
-    inputIp->setPlaceholderText("ip");
+    inputIp->setPlaceholderText("IP");
     layout->addWidget(inputIp);
 
     m_deviceBox = new QComboBox(this);
@@ -167,11 +156,9 @@ void InputTest::initializeAudio(const QAudioDevice &deviceInfo)
     format.setSampleRate(8000);
     format.setChannelCount(1);
     format.setSampleFormat(QAudioFormat::Int16);
-
     m_audioOutput = new AudioOut();
     m_audioInfo.reset(new AudioInfo(format));
     connect(m_audioInfo.data(), &AudioInfo::levelChanged, m_canvas, &RenderArea::setLevel);
-
     m_audioInput.reset(new QAudioSource(deviceInfo, format));
     qreal initialVolume = QAudio::convertVolume(m_audioInput->volume(), QAudio::LinearVolumeScale,
                                                 QAudio::LogarithmicVolumeScale);
@@ -215,35 +202,29 @@ void InputTest::toggleMode()
 {
     m_audioInput->stop();
     toggleSuspend();
-
-    // Change between pull and push modes
     if (m_pullMode) {
-        m_modeButton->setText(tr("unmute mic"));
-        std::cout << "AAAAA" << std::endl;
+        m_modeButton->setText(tr("Unmute mic"));
+
         m_audioInput->start(m_audioInfo.data());
     } else {
-        m_modeButton->setText(tr("mut mic"));
+        m_modeButton->setText(tr("Mute mic"));
         auto *io = m_audioInput->start();
         if (!io)
             return;
 
         connect(io, &QIODevice::readyRead, [this, io]() {
-            static const qint64 BufferSize = 4096;
+            static const qint64 BufferSize = 2048 * 4 ;
             const qint64 len = qMin(m_audioInput->bytesAvailable(), BufferSize);
 
             QByteArray buffer(len, 0);
             qint64 l = io->read(buffer.data(), len);
             if (l > 0) {
                 const qreal level = m_audioInfo->calculateLevel(buffer.constData(), l);
-                //m_audioOutput->play(buffer);
                 if(call_mode == 1 && web1){
-                    //std::cout << "ya ali"<<std::endl;
-                    //std::string g = "hellow";
                     web1->sendMessage(buffer.data());
                 }else if(call_mode == 2 && web2){
                     web2->sendMessage(buffer.data());
                 }
-                //std::cout << "yes " << level << std::endl;
                 m_canvas->setLevel(level);
             }
         });
@@ -254,7 +235,6 @@ void InputTest::toggleMode()
 
 void InputTest::toggleSuspend()
 {
-    // toggle suspend/resume
     switch (m_audioInput->state()) {
     case QAudio::SuspendedState:
     case QAudio::StoppedState:
@@ -266,14 +246,12 @@ void InputTest::toggleSuspend()
         m_suspendResumeButton->setText(tr("Resume recording"));
         break;
     case QAudio::IdleState:
-        // no-op
         break;
     }
 }
 
 void InputTest::toggleSpeaker()
 {
-    //std::cout << "tog spleak" << std::endl;
     if(is_mutespeaker){
         m_audioOutput->start();
         m_muteSpeakerButton->setText(tr("mute Speaker"));
@@ -282,7 +260,6 @@ void InputTest::toggleSpeaker()
         m_audioOutput->stop();
         m_muteSpeakerButton->setText(tr("unmute Speaker"));
     }
-
     is_mutespeaker = !is_mutespeaker;
 }
 
@@ -308,7 +285,6 @@ void InputTest::sliderChanged(int value)
 {
     qreal linearVolume = QAudio::convertVolume(value / qreal(100), QAudio::LogarithmicVolumeScale,
                                                QAudio::LinearVolumeScale);
-
     m_audioInput->setVolume(linearVolume);
 }
 
@@ -332,5 +308,3 @@ void InputTest::chooseCallMode2(){
         web2->start();
     }
 }
-
-// #include "moc_audiosource.cpp"

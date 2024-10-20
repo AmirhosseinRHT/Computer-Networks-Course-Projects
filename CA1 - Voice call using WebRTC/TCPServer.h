@@ -33,8 +33,6 @@ public:
             WSACleanup();
             return;
         }
-
-        // Listen for incoming connections
         if (listen(serverSocket, 1) == SOCKET_ERROR) {
             std::cerr << "Listening failed" << std::endl;
             closesocket(serverSocket);
@@ -44,7 +42,6 @@ public:
 
         std::cout << "Waiting for incoming connection..." << std::endl;
 
-        // Accept client connection
         sockaddr_in clientAddress;
         int clientAddressLength = sizeof(clientAddress);
         clientSocket = accept(serverSocket, reinterpret_cast<sockaddr*>(&clientAddress), &clientAddressLength);
@@ -61,16 +58,13 @@ public:
     {
         char buffer[2048];
         int bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
-        if (bytesRead > 0) {
+        if (bytesRead > 0)
             buffer[bytesRead] = '\0';
-            std::cout << "Received message from client: " << buffer << std::endl;
-        }
         return buffer;
     }
 
     void sendMessage(std::string message)
     {
-        std::cout << "sent message to client: " << message << std::endl;
         send(clientSocket, message.c_str(), strlen(message.c_str()), 0);
     }
 

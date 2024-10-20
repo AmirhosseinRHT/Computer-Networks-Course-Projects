@@ -20,29 +20,21 @@ AudioOut::AudioOut() {
                                        m_format,nullptr});
 
     mute = 0;
-    //io = m_audioOutput->start();
-    // if(!io->open(QIODevice::WriteOnly))
-    // {
-    //     qDebug() << "Couldn't open AudioSink!";
-    // }
-    // connect(this,&AudioSink::checkAudioDataReceived,[&,io]()
-    //         {
-    //             audioSinkData(io);
-    //         });
 
-}
-
-void AudioOut::start(){
-    mute = false;
     m_audioOutput.reset( new QAudioSink{m_devices->defaultAudioOutput(),
                                        m_format,nullptr});
     io = m_audioOutput->start();
 }
 
+void AudioOut::start(){
+    mute = false;
+
+}
+
 
 void AudioOut::stop(){
     mute = true;
-    m_audioOutput->stop();
+
 }
 
 void AudioOut::change_device(int index)

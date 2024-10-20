@@ -3,7 +3,14 @@
 WebRTCClientOferrer::WebRTCClientOferrer() {
     std::cout << "oferrer   ----   client\n ";
     rtc::InitLogger(rtc::LogLevel::Warning);
+    initializePeerConnection();
+    role = 1;
+}
 
+WebRTCClientOferrer::WebRTCClientOferrer(std::string _ip){
+    std::cout << "oferrer   ----   client\n ";
+    rtc::InitLogger(rtc::LogLevel::Warning);
+    ip = _ip;
     initializePeerConnection();
     role = 1;
 }
@@ -11,7 +18,6 @@ WebRTCClientOferrer::WebRTCClientOferrer() {
 void WebRTCClientOferrer::start() {
     initializeDataChannel();
     connect_server();
-    //handleCommands();
 }
 
 void WebRTCClientOferrer::close() {
@@ -42,49 +48,20 @@ void WebRTCClientOferrer::onDataChannel() {
     });
 }
 
-
 void WebRTCClientOferrer::connect_server(){
-    bool exit = false;
-    TCPClient client("127.0.0.1", 12345);
+    TCPClient client(ip, 12345);
     client.Connect();
     client.SendMessage(desc);
     parseDescription(client.recieveMessage());
     parseCandidate(client.recieveMessage());
 }
 
-void WebRTCClientOferrer::handleCommands() {
-    bool exit = false;
-    // TCPClient client("127.0.0.1", 12345);
-    // client.Connect();
-    // client.SendMessage(desc);
-    // parseDescription(client.recieveMessage());
-    // parseCandidate(client.recieveMessage());
-    int command = getCommand();
-    while (!exit) {
-        printMenu();
-        // int command = getCommand();
-        executeCommand(command, exit);
-    }
-}
-
-void WebRTCClientOferrer::printMenu() {
-    std::cout << std::endl
-              << "**********************************************************************************"
-                 "*****"
-              << std::endl
-              << "* 0: Exit / 1: Enter remote description / 2: Enter remote candidate / 3: Send message / 4: Print Connection Info *" << std::endl
-              << "[Command]: ";
-}
 
 int WebRTCClientOferrer::getCommand() {
     int command = -1;
     std::cin >> command;
     std::cin.ignore();
     return command;
-}
-
-void WebRTCClientOferrer::executeCommand(int command, bool& exit) {
-    //sendMessage();
 }
 
 void WebRTCClientOferrer::parseDescription(std::string descript) {
@@ -99,45 +76,19 @@ void WebRTCClientOferrer::parseCandidate(std::string candid) {
 
 void WebRTCClientOferrer::sendMessage(const char * mess) {
     if (!dc->isOpen()) {
-        std::cout << "** Channel is not Open ** ";
+        std::cout << "Channel is not Open\n";
         return;
     }
-    //std::cout << "[Message]: ";
     std::string message = (std::string) mess;
-    //getline(std::cin, message);
     dc->send(message);
-}
-
-void WebRTCClientOferrer::printConnectionInfo() {
-    if (!dc->isOpen()) {
-        std::cout << "** Channel is not Open ** ";
-        return;
-    }
-    rtc::Candidate local, remote;
-    std::optional<std::chrono::milliseconds> rtt = pc->rtt();
-    if (pc->getSelectedCandidatePair(&local, &remote)) {
-        std::cout << "Local: " << local << std::endl;
-        std::cout << "Remote: " << remote << std::endl;
-        std::cout << "Bytes Sent:" << pc->bytesSent() << " / Bytes Received:" << pc->bytesReceived();
-        if (rtt.has_value())
-            std::cout << " / Round-Trip Time:" << rtt.value().count() << " ms";
-        else
-            std::cout << " / Round-Trip Time: null ms";
-    } else {
-        std::cout << "Could not get Candidate Pair Info" << std::endl;
-    }
 }
 
 void WebRTCClientOferrer::setPeerConnectionCallbacks() {
     pc->onLocalDescription([this](rtc::Description description) {
-        // std::cout << "Local Description2 (Paste this to the other peer):" << std::endl;
         desc = std::string(description);
-        // std::cout <<"myfgggggggggggggg desc:" << desc << std::endl;
     });
 
     pc->onLocalCandidate([this](rtc::Candidate candidate) {
-        // std::cout << "Local Candidate (Paste this to the other peer after the local description):" << std::endl;
-        // std::cout << std::string(candidate) << std::endl << std::endl;
         cand.push_back(std::string(candidate));
     });
 
@@ -161,20 +112,15 @@ void WebRTCClientOferrer::setDataChannelCallbacks() {
 
     dc->onMessage([this](auto data) {
         if (std::holds_alternative<std::string>(data)) {
-            std::cout << "[Received: " << std::get<std::string>(data) << "]" << std::endl;
             std::string d = std::get<std::string>(data);
-
             if(ao){
                 QByteArray buffer(d.size() , 0);
                 buffer.setRawData(d.c_str() , d.size());
                 ao->play(buffer);
             }
         }
-
-
     });
 }
-
 
 void WebRTCClientOferrer::setAudioOut(AudioOut *_ao){
     ao = _ao;

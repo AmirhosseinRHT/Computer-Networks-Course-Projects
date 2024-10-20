@@ -27,9 +27,7 @@ public:
 
     void start();
     void stop();
-
     qreal level() const { return m_level; }
-
     qint64 readData(char *data, qint64 maxlen) override;
     qint64 writeData(const char *data, qint64 len) override;
 
@@ -40,7 +38,7 @@ signals:
 
 private:
     const QAudioFormat m_format;
-    qreal m_level = 0.0; // 0.0 <= m_level <= 1.0
+    qreal m_level = 0.0;
 };
 
 class RenderArea : public QWidget
